@@ -1,0 +1,5 @@
+Compilen für Tomcat:
+
+1. Rechtsklick aufs Projekt -> Google -> GWT Compile
+2. AwsCredentials.properties in /war/WEB-INF/classes/ kopieren
+3. /war/* in {tomcat}/webapps/hekabe/ kopieren
