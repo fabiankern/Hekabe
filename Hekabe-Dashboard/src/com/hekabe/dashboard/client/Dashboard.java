@@ -162,6 +162,8 @@ public class Dashboard implements EntryPoint {
 		horizontalPanel.add(lblNewLabel);
 		
 		comboBox = new ListBox();
+		comboBox.addItem("AWS");
+		comboBox.addItem("1&1");
 		horizontalPanel.add(comboBox);
 		
 		horizontalPanel_1 = new HorizontalPanel();
@@ -180,6 +182,12 @@ public class Dashboard implements EntryPoint {
 		horizontalPanel_2.add(lblNewLabel_2);
 		
 		comboBox_1 = new ListBox();
+		comboBox_1.addItem("Large (m1.large)");
+		comboBox_1.addItem("Extra Large (m1.xlarge)");
+		comboBox_1.addItem("High-Memory Extra Large (m2.xlarge)");
+		comboBox_1.addItem("High-Memory Double Extra Large (m2.2xlarge)");
+		comboBox_1.addItem("High-Memory Quadruple Extra Large (m2.4xlarge)");
+		comboBox_1.addItem("High-CPU Extra Large (c1.xlarge)");
 		horizontalPanel_2.add(comboBox_1);
 		
 		lblCassandraConfiguration = new Label("Cassandra Configuration");
@@ -213,6 +221,8 @@ public class Dashboard implements EntryPoint {
 		clusterPanel.add(lblPartitioner);
 		
 		comboBox_2 = new ListBox();
+		comboBox_2.addItem("Byte Order Partitioner");
+		comboBox_2.addItem("Random Partitioner");
 		clusterPanel.add(comboBox_2);
 		
 		cassManagementPanel = new VerticalPanel();
@@ -251,6 +261,12 @@ public class Dashboard implements EntryPoint {
 		horizontalPanel_7.add(lblSize);
 		
 		comboBox_3 = new ListBox();
+		comboBox_3.addItem("Large (m1.large)");
+		comboBox_3.addItem("Extra Large (m1.xlarge)");
+		comboBox_3.addItem("High-Memory Extra Large (m2.xlarge)");
+		comboBox_3.addItem("High-Memory Double Extra Large (m2.2xlarge)");
+		comboBox_3.addItem("High-Memory Quadruple Extra Large (m2.4xlarge)");
+		comboBox_3.addItem("High-CPU Extra Large (c1.xlarge)");
 		horizontalPanel_7.add(comboBox_3);
 		
 		horizontalPanel_8 = new HorizontalPanel();
@@ -260,6 +276,12 @@ public class Dashboard implements EntryPoint {
 		horizontalPanel_8.add(lblRegion);
 		
 		comboBox_4 = new ListBox();
+		comboBox_4.addItem("US East (Virginia)");
+		comboBox_4.addItem("US West (Oregon)");
+		comboBox_4.addItem("US West (California)");
+		comboBox_4.addItem("EU West (Ireland)");
+		comboBox_4.addItem("Asia Pacific (Singapore)");
+		comboBox_4.addItem("Asia Pacific (Tokyo)");
 		horizontalPanel_8.add(comboBox_4);
 		
 		btnDoubleNumberOf = new Button("Double number of nodes");
@@ -307,7 +329,7 @@ public class Dashboard implements EntryPoint {
 		horizontalPanel_12 = new HorizontalPanel();
 		yamlManagementPanel.add(horizontalPanel_12);
 		
-		lblSynchType = new Label("Synch type");
+		lblSynchType = new Label("Synchchronisation type");
 		horizontalPanel_12.add(lblSynchType);
 		
 		comboBox_5 = new ListBox();
