@@ -52,6 +52,12 @@ public class Dashboard implements EntryPoint {
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
+	
+	/**
+	 * Combobox Version
+	 * Textbox Revision
+	 * Cassandra YAML mit sinnvollen std. Werten füllen
+	 */
 	private final CommunicationServiceAsync communicationService = GWT
 			.create(CommunicationService.class);
 	private TabLayoutPanel tabLayoutPanel;

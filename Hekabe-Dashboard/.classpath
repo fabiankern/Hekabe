@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/j2ssh-common-0.2.9.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/j2ssh-core-0.2.9.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/j2ssh-daemon-0.2.9.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/smartgwt.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
