@@ -15,20 +15,25 @@
  */
 package com.hekabe.dashboard.client;
 
-import java.util.LinkedHashMap;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.IntegerItem;
+import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
+import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.tree.TreeGridField;
+import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -59,18 +64,46 @@ public class Dashboard implements EntryPoint {
 	private Tab cassManagementTab;
 	private Tab cassYamlTuningTab;
 	private Label lblHekabeDashboard;
-	private VLayout layout;
+	private VLayout LayoutCreateCluster;
 	private Label lblHardware;
 	private DynamicForm dynamicForm;
 	private Label lblNewLabel;
+	private DynamicForm dynamicForm_1;
+	private TextItem txtClusterName;
+	private ComboBoxItem cbPartitioner;
+	private IntegerItem intReplicationFactor;
+	private ComboBoxItem cbInstanceSize;
+	private IntegerItem intNumberOfInstances;
+	private ComboBoxItem cbProvider;
+	private VLayout LayoutCassManagement;
+	private Label lblHardware_1;
+	private ListGrid runningNodesListGrid;
+	private TreeGridField fieldName;
+	private TreeGridField fieldSize;
+	private TreeGridField fieldIp;
+	private TreeGridField fieldStopButton;
+	private TreeGridField fieldKillButton;
+	private Label lblAddNodes;
+	private DynamicForm dynamicForm_2;
+	private ComboBoxItem cbNodeSize;
+	private ComboBoxItem cbRegion;
+	private ComboBoxItem cbProviderNodes;
+	private VLayout LayoutCassYamlTuning;
+	private Label lblNewLabel_1;
+	private DynamicForm dynamicForm_3;
+	private RadioGroupItem rgHintedHandoff;
+
+	private IntegerItem intMaxWindowTime;
+
+	private IntegerItem intThrottleDelay;
 	
 	@Override
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setSize("800", "600");
+		rootPanel.setSize("900", "800");
 		
 		lblHekabeDashboard = new Label("Hekabe Dashboard");
-		lblHekabeDashboard.setSize("150", "100");
+		lblHekabeDashboard.setSize("150", "30");
 		lblHekabeDashboard.setAlign(Alignment.CENTER);
 		rootPanel.add(lblHekabeDashboard);
 		
@@ -79,17 +112,18 @@ public class Dashboard implements EntryPoint {
 		
 		createClusterTab = new Tab("Create Cluster");
 		
-		layout = new VLayout();
+		LayoutCreateCluster = new VLayout();
 		
 		lblHardware = new Label("Hardware");
-		layout.addMember(lblHardware);
+		lblHardware.setHeight("30");
+		LayoutCreateCluster.addMember(lblHardware);
 		
 		dynamicForm = new DynamicForm();
-		ComboBoxItem cbProvider = new ComboBoxItem("Provider", "Provider");
+		cbProvider = new ComboBoxItem("Provider", "Provider");
 		cbProvider.setShowTitle(true);
 		cbProvider.setTooltip("Choose Cloud-Provider.");
 		cbProvider.setValueMap("Amazon EC2","1&1 Cloud");
-		ComboBoxItem cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
+		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
 		cbInstanceSize.setTooltip("Choose size of the instance(s).");
 		cbInstanceSize.setValueMap("Large (m1.large)",
@@ -98,22 +132,95 @@ public class Dashboard implements EntryPoint {
 								   "High-Memory Double Extra Large (m2.2xlarge)",
 								   "High-Memory Quadruple Extra Large (m2.4xlarge)",
 								   "High-CPU Extra Large (c1.xlarge)");
-		IntegerItem intNumberOfInstances = new IntegerItem();
+		intNumberOfInstances = new IntegerItem();
 		intNumberOfInstances.setTooltip("The number of instances you want to start.");
 		intNumberOfInstances.setTitle("Number of instances");
 		dynamicForm.setFields(new FormItem[] { cbProvider, intNumberOfInstances, cbInstanceSize});
-		layout.addMember(dynamicForm);
+		LayoutCreateCluster.addMember(dynamicForm);
 		
-		lblNewLabel = new Label("New Label");
-		layout.addMember(lblNewLabel);
+		lblNewLabel = new Label("Cassandra Configuration");
+		lblNewLabel.setHeight("30");
+		LayoutCreateCluster.addMember(lblNewLabel);
 		
-		createClusterTab.setPane(layout);
+		dynamicForm_1 = new DynamicForm();
+		txtClusterName = new TextItem("newTextItem_1", "Cluster Name");
+		intReplicationFactor = new IntegerItem();
+		intReplicationFactor.setTitle("Replication Factor");
+		cbPartitioner = new ComboBoxItem("newComboBoxItem_3", "Partitioner");
+		cbPartitioner.setValueMap("Random Partitioner","Byte Ordered Partitioner");
+		
+		dynamicForm_1.setFields(new FormItem[] { txtClusterName, intReplicationFactor, cbPartitioner });
+		LayoutCreateCluster.addMember(dynamicForm_1);
+		
+		createClusterTab.setPane(LayoutCreateCluster);
 		tabSet.addTab(createClusterTab);
 		
 		cassManagementTab = new Tab("Cassandra Management");
+		
+		LayoutCassManagement = new VLayout();
+		LayoutCassManagement.setWidth("750");
+		
+		lblHardware_1 = new Label("Hardware");
+		lblHardware_1.setHeight("30");
+		LayoutCassManagement.addMember(lblHardware_1);
+		
+		runningNodesListGrid = new ListGrid();
+		runningNodesListGrid.setHeight("150");
+		runningNodesListGrid.setEmptyMessage("No nodes running.");
+		fieldName = new TreeGridField("fieldName", "Name");
+		fieldSize = new TreeGridField("fieldSize", "Size");
+		fieldIp = new TreeGridField("fieldIp", "IP");
+		fieldStopButton = new TreeGridField("fieldStopButton", "Stop", 20);
+		fieldStopButton.setType(ListGridFieldType.ICON);
+		fieldKillButton = new TreeGridField("fieldKillButton", "Kill", 20);
+		fieldKillButton.setType(ListGridFieldType.ICON);
+		runningNodesListGrid.setFields(new ListGridField[] { fieldName, fieldSize, fieldIp });
+		LayoutCassManagement.addMember(runningNodesListGrid);
+		
+		lblAddNodes = new Label("Add Nodes");
+		lblAddNodes.setHeight("30");
+		LayoutCassManagement.addMember(lblAddNodes);
+		
+		dynamicForm_2 = new DynamicForm();
+		IntegerItem intNumberOfNodes = new IntegerItem();
+		intNumberOfNodes.setTitle("Number of Nodes");
+		cbNodeSize = new ComboBoxItem("nodeSize", "Node size");
+		cbNodeSize.setValueMap("Large (m1.large)",
+				   "Extra Large (m1.xlarge)",
+				   "High-Memory Extra Large (m2.xlarge)",
+				   "High-Memory Double Extra Large (m2.2xlarge)",
+				   "High-Memory Quadruple Extra Large (m2.4xlarge)",
+				   "High-CPU Extra Large (c1.xlarge)");
+		cbRegion = new ComboBoxItem("Region", "Region");
+		cbRegion.setValueMap("US East (Virginia)",
+							 "US West (Oregon)",
+							 "US West (California)",
+							 "EU West (Ireland)",
+							 "Asia Pacific (Singapore)",
+							 "Asia Pacific (Tokyo)");
+		cbProviderNodes = new ComboBoxItem("newComboBoxItem_4", "Provider");
+		cbProviderNodes.setValueMap("Amazon EC2","1&1 Cloud");
+		dynamicForm_2.setFields(new FormItem[] { cbProviderNodes, intNumberOfNodes, cbNodeSize, cbRegion});
+		LayoutCassManagement.addMember(dynamicForm_2);
+		cassManagementTab.setPane(LayoutCassManagement);
 		tabSet.addTab(cassManagementTab);
 		
 		cassYamlTuningTab = new Tab("Cassandra YAML Tuning");
+		
+		LayoutCassYamlTuning = new VLayout();
+		
+		lblNewLabel_1 = new Label("Hinted Handoff");
+		lblNewLabel_1.setHeight("30");
+		LayoutCassYamlTuning.addMember(lblNewLabel_1);
+		
+		dynamicForm_3 = new DynamicForm();
+		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
+		rgHintedHandoff.setValueMap("Enabled","Disabled");
+		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
+		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
+		dynamicForm_3.setFields(new FormItem[] { rgHintedHandoff, intMaxWindowTime, intThrottleDelay});
+		LayoutCassYamlTuning.addMember(dynamicForm_3);
+		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		tabSet.addTab(cassYamlTuningTab);
 		rootPanel.add(tabSet);
 	}
