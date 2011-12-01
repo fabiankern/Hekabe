@@ -96,6 +96,9 @@ public class Dashboard implements EntryPoint {
 	private IntegerItem intMaxWindowTime;
 
 	private IntegerItem intThrottleDelay;
+	private Label lblNewLabel_2;
+	private DynamicForm dynamicForm_4;
+	private ComboBoxItem cbSyncType;
 	
 	@Override
 	public void onModuleLoad() {
@@ -220,6 +223,15 @@ public class Dashboard implements EntryPoint {
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
 		dynamicForm_3.setFields(new FormItem[] { rgHintedHandoff, intMaxWindowTime, intThrottleDelay});
 		LayoutCassYamlTuning.addMember(dynamicForm_3);
+		
+		lblNewLabel_2 = new Label("Commit Log");
+		lblNewLabel_2.setHeight(30);
+		LayoutCassYamlTuning.addMember(lblNewLabel_2);
+		
+		dynamicForm_4 = new DynamicForm();
+		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
+		dynamicForm_4.setFields(new FormItem[] { cbSyncType});
+		LayoutCassYamlTuning.addMember(dynamicForm_4);
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		tabSet.addTab(cassYamlTuningTab);
 		rootPanel.add(tabSet);
