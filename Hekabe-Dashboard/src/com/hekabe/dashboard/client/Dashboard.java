@@ -110,6 +110,22 @@ public class Dashboard implements EntryPoint {
 	private FloatItem floatReduceCacheCapacity;
 
 	private FloatItem floatReduceCacheAt;
+
+	private Label lblNewLabel_4;
+
+	private DynamicForm dynamicForm_6;
+
+	private IntegerItem intConcurrentReads;
+
+	private IntegerItem intConcurrentWrites;
+
+	private Label lblNewLabel_5;
+
+	private IntegerItem intMemtableTotalSpace;
+
+	private DynamicForm dynamicForm_7;
+
+	private IntegerItem intMemtableWriterThreads;
 	
 	@Override
 	public void onModuleLoad() {
@@ -229,6 +245,7 @@ public class Dashboard implements EntryPoint {
 		
 		dynamicForm_3 = new DynamicForm();
 		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
+		rgHintedHandoff.setVertical(false);
 		rgHintedHandoff.setValueMap("Enabled","Disabled");
 		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
@@ -258,6 +275,26 @@ public class Dashboard implements EntryPoint {
 		floatReduceCacheCapacity = new FloatItem("floatReduceCacheCapacity", "Reduce cache capacity");
 		dynamicForm_5.setFields(new FormItem[] { floatFlushLargestMemtableAt, floatReduceCacheAt, floatReduceCacheCapacity });
 		LayoutCassYamlTuning.addMember(dynamicForm_5);
+		
+		lblNewLabel_4 = new Label("Read/Write");
+		lblNewLabel_4.setHeight(30);
+		LayoutCassYamlTuning.addMember(lblNewLabel_4);
+		
+		dynamicForm_6 = new DynamicForm();
+		intConcurrentReads = new IntegerItem("intConcurrentReads", "Concurrent Reads");
+		intConcurrentWrites = new IntegerItem("intConcurrentWrites", "Concurrent Writes");
+		dynamicForm_6.setFields(new FormItem[] { intConcurrentReads, intConcurrentWrites });
+		LayoutCassYamlTuning.addMember(dynamicForm_6);
+		
+		lblNewLabel_5 = new Label("Memtable");
+		lblNewLabel_5.setHeight(30);
+		LayoutCassYamlTuning.addMember(lblNewLabel_5);
+		
+		dynamicForm_7 = new DynamicForm();
+		intMemtableTotalSpace = new IntegerItem("intMemtableTotalSpace", "Memtable total space (0 = unlimited) (mb)");
+		intMemtableWriterThreads = new IntegerItem("intMemtableWriterThreads", "Memtable writer threads (0 = automatic)");
+		dynamicForm_7.setFields(new FormItem[] { intMemtableTotalSpace, intMemtableWriterThreads });
+		LayoutCassYamlTuning.addMember(dynamicForm_7);
 		
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		tabSet.addTab(cassYamlTuningTab);
