@@ -23,6 +23,7 @@ import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
+import com.smartgwt.client.widgets.form.fields.FloatItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
@@ -99,6 +100,16 @@ public class Dashboard implements EntryPoint {
 	private Label lblNewLabel_2;
 	private DynamicForm dynamicForm_4;
 	private ComboBoxItem cbSyncType;
+
+	private Label lblNewLabel_3;
+
+	private DynamicForm dynamicForm_5;
+
+	private FloatItem floatFlushLargestMemtableAt;
+
+	private FloatItem floatReduceCacheCapacity;
+
+	private FloatItem floatReduceCacheAt;
 	
 	@Override
 	public void onModuleLoad() {
@@ -230,10 +241,47 @@ public class Dashboard implements EntryPoint {
 		
 		dynamicForm_4 = new DynamicForm();
 		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
-		dynamicForm_4.setFields(new FormItem[] { cbSyncType});
+		IntegerItem intTimeWindows = new IntegerItem();
+		intTimeWindows.setTitle("Time window (ms)");
+		IntegerItem intCommitlogTotalSpace = new IntegerItem();
+		intCommitlogTotalSpace.setTitle("commitlog_total_space (0 = unlimited) (mb)");
+		dynamicForm_4.setFields(new FormItem[] { cbSyncType, intTimeWindows, intCommitlogTotalSpace});
 		LayoutCassYamlTuning.addMember(dynamicForm_4);
+		
+		lblNewLabel_3 = new Label("Garbage Collection");
+		lblNewLabel_3.setHeight(30);
+		LayoutCassYamlTuning.addMember(lblNewLabel_3);
+		
+		dynamicForm_5 = new DynamicForm();
+		floatFlushLargestMemtableAt = new FloatItem("floatFlushLargestMemtableAt", "Flush largest memtable at");
+		floatReduceCacheAt = new FloatItem("floatReduceCacheAt", "Reduce cache at");
+		floatReduceCacheCapacity = new FloatItem("floatReduceCacheCapacity", "Reduce cache capacity");
+		dynamicForm_5.setFields(new FormItem[] { floatFlushLargestMemtableAt, floatReduceCacheAt, floatReduceCacheCapacity });
+		LayoutCassYamlTuning.addMember(dynamicForm_5);
+		
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		tabSet.addTab(cassYamlTuningTab);
 		rootPanel.add(tabSet);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
