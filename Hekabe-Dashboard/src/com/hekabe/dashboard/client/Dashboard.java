@@ -20,21 +20,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
+import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.IntegerItem;
+import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.layout.SectionStack;
+import com.smartgwt.client.widgets.layout.SectionStackSection;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
-import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.tree.TreeGridField;
-import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -60,7 +62,7 @@ public class Dashboard implements EntryPoint {
 	
 	private final CommunicationServiceAsync communicationService = GWT
 			.create(CommunicationService.class);
-	private TabSet tabSet;
+	private TabSet newClusterTabSet;
 	private Tab createClusterTab;
 	private Tab cassManagementTab;
 	private Tab cassYamlTuningTab;
@@ -126,19 +128,47 @@ public class Dashboard implements EntryPoint {
 	private DynamicForm dynamicForm_7;
 
 	private IntegerItem intMemtableWriterThreads;
+
+	private IntegerItem intTimeWindows;
+
+	private IntegerItem intCommitlogTotalSpace;
+
+	private SectionStack sectionStack;
+
+	private SectionStackSection managementSection;
+
+	private SectionStackSection newClusterSection;
+
+	private IntegerItem intNumberOfNodes;
+
+	private TabSet managementTabSet;
 	
 	@Override
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setSize("900", "800");
+		rootPanel.setSize("800", "600");
 		
 		lblHekabeDashboard = new Label("Hekabe Dashboard");
 		lblHekabeDashboard.setSize("150", "30");
 		lblHekabeDashboard.setAlign(Alignment.CENTER);
 		rootPanel.add(lblHekabeDashboard);
 		
-		tabSet = new TabSet();
-		tabSet.setSize("800", "600");
+		sectionStack = new SectionStack();
+		sectionStack.setVisibilityMode(VisibilityMode.MUTEX);
+		sectionStack.setSize("750", "650");
+		
+		managementSection = new SectionStackSection("Management");
+		managementSection.setExpanded(true);
+		newClusterSection = new SectionStackSection("New Cluster");
+		newClusterSection.setExpanded(false);
+		
+		sectionStack.addSection(managementSection);
+		sectionStack.addSection(newClusterSection);
+		
+		newClusterTabSet = new TabSet();
+		newClusterTabSet.setSize("750", "595");
+		managementTabSet = new TabSet();
+		managementTabSet.setSize("750", "595");
 		
 		createClusterTab = new Tab("Create Cluster");
 		
@@ -153,6 +183,7 @@ public class Dashboard implements EntryPoint {
 		cbProvider.setShowTitle(true);
 		cbProvider.setTooltip("Choose Cloud-Provider.");
 		cbProvider.setValueMap("Amazon EC2","1&1 Cloud");
+		cbProvider.setDefaultToFirstOption(true);
 		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
 		cbInstanceSize.setTooltip("Choose size of the instance(s).");
@@ -162,6 +193,7 @@ public class Dashboard implements EntryPoint {
 								   "High-Memory Double Extra Large (m2.2xlarge)",
 								   "High-Memory Quadruple Extra Large (m2.4xlarge)",
 								   "High-CPU Extra Large (c1.xlarge)");
+		cbInstanceSize.setDefaultToFirstOption(true);
 		intNumberOfInstances = new IntegerItem();
 		intNumberOfInstances.setTooltip("The number of instances you want to start.");
 		intNumberOfInstances.setTitle("Number of instances");
@@ -178,12 +210,12 @@ public class Dashboard implements EntryPoint {
 		intReplicationFactor.setTitle("Replication Factor");
 		cbPartitioner = new ComboBoxItem("newComboBoxItem_3", "Partitioner");
 		cbPartitioner.setValueMap("Random Partitioner","Byte Ordered Partitioner");
+		cbPartitioner.setDefaultToFirstOption(true);
 		
 		dynamicForm_1.setFields(new FormItem[] { txtClusterName, intReplicationFactor, cbPartitioner });
 		LayoutCreateCluster.addMember(dynamicForm_1);
 		
 		createClusterTab.setPane(LayoutCreateCluster);
-		tabSet.addTab(createClusterTab);
 		
 		cassManagementTab = new Tab("Cassandra Management");
 		
@@ -200,11 +232,11 @@ public class Dashboard implements EntryPoint {
 		fieldName = new TreeGridField("fieldName", "Name");
 		fieldSize = new TreeGridField("fieldSize", "Size");
 		fieldIp = new TreeGridField("fieldIp", "IP");
-		fieldStopButton = new TreeGridField("fieldStopButton", "Stop", 20);
+		fieldStopButton = new TreeGridField("fieldStopButton", "Stop", 60);
 		fieldStopButton.setType(ListGridFieldType.ICON);
-		fieldKillButton = new TreeGridField("fieldKillButton", "Kill", 20);
+		fieldKillButton = new TreeGridField("fieldKillButton", "Kill", 60);
 		fieldKillButton.setType(ListGridFieldType.ICON);
-		runningNodesListGrid.setFields(new ListGridField[] { fieldName, fieldSize, fieldIp });
+		runningNodesListGrid.setFields(new ListGridField[] { fieldName, fieldSize, fieldIp, fieldStopButton, fieldKillButton });
 		LayoutCassManagement.addMember(runningNodesListGrid);
 		
 		lblAddNodes = new Label("Add Nodes");
@@ -212,7 +244,7 @@ public class Dashboard implements EntryPoint {
 		LayoutCassManagement.addMember(lblAddNodes);
 		
 		dynamicForm_2 = new DynamicForm();
-		IntegerItem intNumberOfNodes = new IntegerItem();
+		intNumberOfNodes = new IntegerItem();
 		intNumberOfNodes.setTitle("Number of Nodes");
 		cbNodeSize = new ComboBoxItem("nodeSize", "Node size");
 		cbNodeSize.setValueMap("Large (m1.large)",
@@ -221,6 +253,7 @@ public class Dashboard implements EntryPoint {
 				   "High-Memory Double Extra Large (m2.2xlarge)",
 				   "High-Memory Quadruple Extra Large (m2.4xlarge)",
 				   "High-CPU Extra Large (c1.xlarge)");
+		cbNodeSize.setDefaultToFirstOption(true);
 		cbRegion = new ComboBoxItem("Region", "Region");
 		cbRegion.setValueMap("US East (Virginia)",
 							 "US West (Oregon)",
@@ -228,12 +261,15 @@ public class Dashboard implements EntryPoint {
 							 "EU West (Ireland)",
 							 "Asia Pacific (Singapore)",
 							 "Asia Pacific (Tokyo)");
+		cbRegion.setDefaultToFirstOption(true);
 		cbProviderNodes = new ComboBoxItem("newComboBoxItem_4", "Provider");
 		cbProviderNodes.setValueMap("Amazon EC2","1&1 Cloud");
+		cbProviderNodes.setDefaultToFirstOption(true);
+		
 		dynamicForm_2.setFields(new FormItem[] { cbProviderNodes, intNumberOfNodes, cbNodeSize, cbRegion});
 		LayoutCassManagement.addMember(dynamicForm_2);
 		cassManagementTab.setPane(LayoutCassManagement);
-		tabSet.addTab(cassManagementTab);
+		
 		
 		cassYamlTuningTab = new Tab("Cassandra YAML Tuning");
 		
@@ -258,9 +294,11 @@ public class Dashboard implements EntryPoint {
 		
 		dynamicForm_4 = new DynamicForm();
 		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
-		IntegerItem intTimeWindows = new IntegerItem();
+		cbSyncType.setValueMap("periodic",
+							   "batch");
+		intTimeWindows = new IntegerItem();
 		intTimeWindows.setTitle("Time window (ms)");
-		IntegerItem intCommitlogTotalSpace = new IntegerItem();
+		intCommitlogTotalSpace = new IntegerItem();
 		intCommitlogTotalSpace.setTitle("commitlog_total_space (0 = unlimited) (mb)");
 		dynamicForm_4.setFields(new FormItem[] { cbSyncType, intTimeWindows, intCommitlogTotalSpace});
 		LayoutCassYamlTuning.addMember(dynamicForm_4);
@@ -297,28 +335,11 @@ public class Dashboard implements EntryPoint {
 		LayoutCassYamlTuning.addMember(dynamicForm_7);
 		
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
-		tabSet.addTab(cassYamlTuningTab);
-		rootPanel.add(tabSet);
+		
+		newClusterTabSet.addTab(createClusterTab);
+		newClusterTabSet.addTab(cassManagementTab);
+		newClusterTabSet.addTab(cassYamlTuningTab);
+		newClusterSection.addItem(newClusterTabSet);
+		rootPanel.add(sectionStack);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
