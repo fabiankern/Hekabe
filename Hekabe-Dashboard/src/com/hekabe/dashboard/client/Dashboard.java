@@ -177,7 +177,7 @@ public class Dashboard implements EntryPoint {
 			public void onKeyUp(KeyUpEvent event) {				
 				clientFunctions.changeProvider(cbProvider.getValueAsString());
 			}
-		});
+		}); 
 		
 		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
