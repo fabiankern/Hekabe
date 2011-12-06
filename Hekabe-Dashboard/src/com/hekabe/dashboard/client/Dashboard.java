@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.VisibilityMode;
+import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
@@ -31,8 +32,6 @@ import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.SectionStack;
@@ -43,11 +42,6 @@ import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
-/**
- * Combobox Version
- * Textbox Revision
  * Cassandra YAML mit sinnvollen std. Werten füllen
  */
 public class Dashboard implements EntryPoint {
@@ -69,8 +63,8 @@ public class Dashboard implements EntryPoint {
 			.create(CommunicationService.class);
 	private TabSet newClusterTabSet;
 	private Tab hardwareTab;
-	private Tab cassManagementTab;
-	private Tab cassYamlTuningTab;
+	private Tab cassandraTab;
+	private Tab cassandraConfigTab;
 	private Label lblHekabeDashboard;
 	private VLayout LayoutCreateCluster;
 	private Label lblProvider;
@@ -83,12 +77,12 @@ public class Dashboard implements EntryPoint {
 	private ComboBoxItem cbInstanceSize;
 	private IntegerItem intNumberOfInstances;
 	private ComboBoxItem cbProvider;
-	private VLayout LayoutCassManagement;
+	private VLayout layoutCassandra;
 	private Label lblHardware_1;
-	private ListGrid runningNodesListGrid;
+	private ListGrid runningClusterListGrid;
 	private TreeGridField fieldName;
-	private TreeGridField fieldSize;
-	private TreeGridField fieldIp;
+	private TreeGridField fieldProvider;
+	private TreeGridField fieldNumberOfNodes;
 	private TreeGridField fieldStopButton;
 	private TreeGridField fieldKillButton;
 	private Label lblAddNodes;
@@ -96,7 +90,7 @@ public class Dashboard implements EntryPoint {
 	private ComboBoxItem cbNodeSize;
 	private ComboBoxItem cbRegion;
 	private ComboBoxItem cbProviderNodes;
-	private VLayout LayoutCassYamlTuning;
+	private VLayout layoutNodeConfig;
 	private Label lblNewLabel_1;
 	private DynamicForm dynamicForm_3;
 	private RadioGroupItem rgHintedHandoff;
@@ -111,8 +105,6 @@ public class Dashboard implements EntryPoint {
 	private Label lblNewLabel_3;
 
 	private DynamicForm dynamicForm_5;
-
-	private FloatItem floatFlushLargestMemtableAt;
 
 	private FloatItem floatReduceCacheCapacity;
 
@@ -144,11 +136,97 @@ public class Dashboard implements EntryPoint {
 
 	private SectionStackSection newClusterSection;
 
-	private IntegerItem intNumberOfNodes;
-
 	private TabSet managementTabSet;
 
-	private TextItem textAccessKey;
+	private TextItem txtAccessKey;
+
+	private TextItem txtSecretAccessKey;
+
+	private Label lblCluster;
+
+	private DynamicForm dynamicForm_01;
+
+	private ComboBoxItem cbCassVersion;
+
+	private IntegerItem intFlushFraction;
+
+	private Button btnSwitchToTab2;
+
+	private VLayout layoutManagement;
+
+	private Label lblRunningCluster;
+
+	private Tab nodeSummaryTab;
+
+	private ListGrid nodeListGrid;
+
+	private TreeGridField fieldIp;
+
+	private TreeGridField fieldStartCassandraButton;
+
+	private TreeGridField fieldStopCassandraButton;
+
+	private TreeGridField fieldStopInstance;
+
+	private VLayout layoutNewNode;
+
+	private DynamicForm dynamicForm_8;
+
+	private Label lblNewNode;
+
+	private TextItem txtAccessKeyNodes;
+
+	private TextItem txtSecretAccessKeyNodes;
+
+	private TextItem txtIpAddresses1and1;
+
+	private TextItem txtLoginName1and1;
+
+	private TextItem txtPass1and1;
+
+	private ComboBoxItem cbRegionNodes;
+
+	private Tab newNodeTab;
+
+	private Tab nodeConfigTab;
+
+	private DynamicForm dynamicForm_3_Nodes;
+
+	private RadioGroupItem rgHintedHandoffNodes;
+
+	private IntegerItem intMaxWindowTimeNodes;
+
+	private IntegerItem intThrottleDelayNodes;
+
+	private VLayout layoutConfig;
+
+	private DynamicForm dynamicForm_4_Nodes;
+
+	private ComboBoxItem cbSyncTypeNodes;
+
+	private IntegerItem intTimeWindowsNodes;
+
+	private IntegerItem intCommitlogTotalSpaceNodes;
+
+	private DynamicForm dynamicForm_5_Nodes;
+
+	private FloatItem floatReduceCacheAtNodes;
+
+	private FloatItem floatReduceCacheCapacityNodes;
+
+	private DynamicForm dynamicForm_6_Nodes;
+
+	private IntegerItem intConcurrentReadsNodes;
+
+	private IntegerItem intConcurrentWritesNodes;
+
+	private DynamicForm dynamicForm_7_Nodes;
+
+	private IntegerItem intMemtableTotalSpaceNodes;
+
+	private IntegerItem intMemtableWriterThreadsNodes;
+
+	private IntegerItem intFlushFractionNodes;
 	
 	@Override
 	public void onModuleLoad() {
@@ -171,15 +249,181 @@ public class Dashboard implements EntryPoint {
 		newClusterSection = new SectionStackSection("New Cluster");
 		newClusterSection.setExpanded(false);
 		
-		sectionStack.addSection(managementSection);
-		sectionStack.addSection(newClusterSection);
-		
 		newClusterTabSet = new TabSet();
 		newClusterTabSet.setSize("750", "595");
 		managementTabSet = new TabSet();
 		managementTabSet.setSize("750", "595");
+
+		initNewClusterSection();
+		initManagementSection();
 		
-		hardwareTab = new Tab("Hardware");
+		sectionStack.addSection(managementSection);
+		sectionStack.addSection(newClusterSection);
+		
+		rootPanel.add(sectionStack);
+	}
+	
+	private void initNewClusterSection() {
+		initHardwareTab();
+		initCassandraTab();
+		initCassandraConfigTuningTab();
+		
+		newClusterTabSet.addTab(hardwareTab);
+		newClusterTabSet.addTab(cassandraTab);
+		newClusterTabSet.addTab(cassandraConfigTab);
+		newClusterSection.addItem(newClusterTabSet);
+	}
+	
+	private void initManagementSection() {
+		layoutManagement = new VLayout();
+		
+		initClusterTable();		
+		initNodeSummaryTab();
+		initNewNodesTab();
+		initConfigTab();
+		initSchemaTab();
+		
+		managementTabSet.addTab(nodeSummaryTab);
+		managementTabSet.addTab(newNodeTab);
+		managementTabSet.addTab(nodeConfigTab);
+		
+		
+		layoutManagement.addMember(managementTabSet);
+		managementSection.addItem(layoutManagement);
+	}
+	
+	private void initClusterTable() {
+		lblRunningCluster = new Label("Cluster");
+		lblRunningCluster.setHeight(30);
+		layoutManagement.addMember(lblRunningCluster);
+		
+		runningClusterListGrid = new ListGrid();
+		runningClusterListGrid.setHeight("150");
+		runningClusterListGrid.setEmptyMessage("No clusters running.");
+		fieldName = new TreeGridField("fieldName", "Name");
+		fieldProvider = new TreeGridField("fieldProvider", "Provider");
+		fieldNumberOfNodes = new TreeGridField("fieldNumberOfNodes", "Number of nodes");
+		runningClusterListGrid.setFields(new ListGridField[] { fieldName, fieldProvider, fieldNumberOfNodes });
+		
+		layoutManagement.addMember(runningClusterListGrid);
+	}
+
+	private void initNodeSummaryTab() {
+		nodeSummaryTab = new Tab("Node Summary");
+		
+		nodeListGrid = new ListGrid();
+		nodeListGrid.setHeight(150);
+		nodeListGrid.setEmptyMessage("No nodes in this cluster running.");
+		fieldIp = new TreeGridField("fieldIp", "IP");
+		fieldStartCassandraButton = new TreeGridField("fieldStartCassandraButton", "Start Cassandra");
+		fieldStartCassandraButton.setType(ListGridFieldType.ICON);
+		fieldStopCassandraButton = new TreeGridField("fieldStopCassandraButton", "Stop Cassandra");
+		fieldStopCassandraButton.setType(ListGridFieldType.ICON);
+		fieldStopInstance = new TreeGridField("fieldStopInstance", "Stop Instance");
+		fieldStopInstance.setType(ListGridFieldType.ICON);
+		nodeListGrid.setFields(new ListGridField[] { fieldIp, fieldStartCassandraButton, fieldStopCassandraButton, fieldStopInstance });
+		
+		nodeSummaryTab.setPane(nodeListGrid);
+	}
+
+	private void initNewNodesTab() {
+		newNodeTab = new Tab("New Node");
+		
+		layoutNewNode = new VLayout();
+		
+		lblNewNode = new Label("New Node");
+		lblNewNode.setHeight(30);
+		layoutNewNode.addMember(lblNewNode);
+		
+		dynamicForm_8 = new DynamicForm();
+		cbProviderNodes = new ComboBoxItem("cbProviderNodes", "Provider");
+		cbProviderNodes.setValueMap("Amazon EC2","1&1 Cloud");
+		cbProviderNodes.setDefaultToFirstOption(true);
+		txtAccessKeyNodes = new TextItem("txtAccessKey", "Access Key");
+		txtSecretAccessKeyNodes = new TextItem("txtSecretAccessKey", "Secret Access Key");
+		txtIpAddresses1and1 = new TextItem("txtIpAddresses", "IPs");
+		txtLoginName1and1 = new TextItem("txtLoginName1and1", "Login");
+		txtPass1and1 = new TextItem("txtPass1and1", "Password");
+		cbRegionNodes = new ComboBoxItem("Region", "Region");
+		cbRegionNodes.setValueMap("US East (Virginia)",
+							 "US West (Oregon)",
+							 "US West (California)",
+							 "EU West (Ireland)",
+							 "Asia Pacific (Singapore)",
+							 "Asia Pacific (Tokyo)");
+		cbRegionNodes.setDefaultToFirstOption(true);
+		
+		dynamicForm_8.setFields(new FormItem[] { cbProviderNodes, txtAccessKeyNodes, 
+				txtSecretAccessKeyNodes, txtIpAddresses1and1, txtLoginName1and1,
+				txtPass1and1, cbRegionNodes });
+		
+		layoutNewNode.addMember(dynamicForm_8);
+		newNodeTab.setPane(layoutNewNode);
+	}
+
+	private void initConfigTab() {
+		nodeConfigTab = new Tab("Config");
+		
+		layoutNodeConfig = new VLayout();
+
+		layoutNodeConfig.addMember(lblNewLabel_1);
+		
+		dynamicForm_3_Nodes = new DynamicForm();
+		rgHintedHandoffNodes = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
+		rgHintedHandoffNodes.setVertical(false);
+		rgHintedHandoffNodes.setValueMap("Enabled","Disabled");
+		intMaxWindowTimeNodes = new IntegerItem("maxWindowTimeNodes", "Maximum Window Time (ms)");
+		intThrottleDelayNodes = new IntegerItem("throttleDelayNodes", "Throttle Delay (ms)");
+		dynamicForm_3_Nodes.setFields(new FormItem[] { rgHintedHandoffNodes, intMaxWindowTimeNodes, intThrottleDelayNodes });
+		layoutNodeConfig.addMember(dynamicForm_3_Nodes);
+		
+		layoutNodeConfig.addMember(lblNewLabel_2);
+		
+		dynamicForm_4_Nodes = new DynamicForm();
+		cbSyncTypeNodes = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
+		cbSyncTypeNodes.setValueMap("periodic","batch");
+		intTimeWindowsNodes = new IntegerItem();
+		intTimeWindowsNodes.setTitle("Time window (ms)");
+		intCommitlogTotalSpaceNodes = new IntegerItem();
+		intCommitlogTotalSpaceNodes.setTitle("commitlog_total_space (0 = unlimited) (mb)");
+		dynamicForm_4_Nodes.setFields(new FormItem[] { cbSyncTypeNodes, intTimeWindowsNodes, intCommitlogTotalSpaceNodes});
+		layoutNodeConfig.addMember(dynamicForm_4_Nodes);
+		
+		layoutNodeConfig.addMember(lblNewLabel_3);
+		
+		dynamicForm_5_Nodes = new DynamicForm();
+		floatReduceCacheAtNodes = new FloatItem("floatReduceCacheAt", "Reduce cache at");
+		floatReduceCacheCapacityNodes = new FloatItem("floatReduceCacheCapacity", "Reduce cache capacity");
+		dynamicForm_5_Nodes.setFields(new FormItem[] { floatReduceCacheAtNodes, floatReduceCacheCapacityNodes });
+		layoutNodeConfig.addMember(dynamicForm_5_Nodes);
+		
+		layoutNodeConfig.addMember(lblNewLabel_4);
+		
+		dynamicForm_6_Nodes = new DynamicForm();
+		intConcurrentReadsNodes = new IntegerItem("intConcurrentReads", "Concurrent Reads");
+		intConcurrentWritesNodes = new IntegerItem("intConcurrentWrites", "Concurrent Writes");
+		dynamicForm_6_Nodes.setFields(new FormItem[] { intConcurrentReadsNodes, intConcurrentWritesNodes });
+		layoutNodeConfig.addMember(dynamicForm_6_Nodes);
+
+		layoutNodeConfig.addMember(lblNewLabel_5);
+		
+		dynamicForm_7_Nodes = new DynamicForm();
+		intMemtableTotalSpaceNodes = new IntegerItem("intMemtableTotalSpace", "Memtable total space (0 = unlimited) (mb)");
+		intMemtableWriterThreadsNodes = new IntegerItem("intMemtableWriterThreads", "Memtable writer threads (0 = automatic)");
+		intFlushFractionNodes = new IntegerItem("intFlushFraction", "Flush fraction (%)");
+		dynamicForm_7_Nodes.setFields(new FormItem[] { intMemtableTotalSpaceNodes, intMemtableWriterThreadsNodes, intFlushFractionNodes });
+		layoutNodeConfig.addMember(dynamicForm_7_Nodes);
+		
+		nodeConfigTab.setPane(layoutNodeConfig);
+	}
+
+	private void initSchemaTab() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void initHardwareTab() {
+		hardwareTab = new Tab("1. Hardware");
 		
 		LayoutCreateCluster = new VLayout();
 		
@@ -202,7 +446,30 @@ public class Dashboard implements EntryPoint {
 			
 		});
 		
-		textAccessKey = new TextItem("", "");
+		txtAccessKey = new TextItem("txtAccessKey", "Access Key");
+		txtSecretAccessKey = new TextItem("txtSecretAccessKey", "Secret Access Key");
+		
+		dynamicForm.setFields(new FormItem[] { cbProvider, txtAccessKey, txtSecretAccessKey });
+		LayoutCreateCluster.addMember(dynamicForm);
+		
+		lblCluster = new Label("Cluster");
+		lblCluster.setHeight("30");
+		LayoutCreateCluster.addMember(lblCluster);
+		
+		dynamicForm_01 = new DynamicForm();
+		intNumberOfInstances = new IntegerItem();
+		intNumberOfInstances.setTooltip("The number of instances you want to start.");
+		intNumberOfInstances.setTitle("Number of instances");
+		
+		cbRegion = new ComboBoxItem("Region", "Region");
+		cbRegion.setValueMap("US East (Virginia)",
+							 "US West (Oregon)",
+							 "US West (California)",
+							 "EU West (Ireland)",
+							 "Asia Pacific (Singapore)",
+							 "Asia Pacific (Tokyo)");
+		cbRegion.setDefaultToFirstOption(true);
+		
 		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
 		cbInstanceSize.setTooltip("Choose size of the instance(s).");
@@ -213,90 +480,49 @@ public class Dashboard implements EntryPoint {
 								   "High-Memory Quadruple Extra Large (m2.4xlarge)",
 								   "High-CPU Extra Large (c1.xlarge)");
 		cbInstanceSize.setDefaultToFirstOption(true);
-		intNumberOfInstances = new IntegerItem();
-		intNumberOfInstances.setTooltip("The number of instances you want to start.");
-		intNumberOfInstances.setTitle("Number of instances");
-		dynamicForm.setFields(new FormItem[] { cbProvider, intNumberOfInstances, cbInstanceSize});
-		LayoutCreateCluster.addMember(dynamicForm);
 		
-		lblNewLabel = new Label("Cassandra Configuration");
+		dynamicForm_01.setFields(new FormItem[] { intNumberOfInstances, cbRegion, cbInstanceSize });
+		LayoutCreateCluster.addMember(dynamicForm_01);
+		
+		btnSwitchToTab2 = new Button("Next");
+		LayoutCreateCluster.addMember(btnSwitchToTab2);
+		
+		hardwareTab.setPane(LayoutCreateCluster);
+	}
+	
+	private void initCassandraTab() {
+		cassandraTab = new Tab("2. Cassandra");
+		
+		layoutCassandra = new VLayout();
+		layoutCassandra.setWidth("750");
+		
+		lblNewLabel = new Label("Cluster");
 		lblNewLabel.setHeight("30");
-		LayoutCreateCluster.addMember(lblNewLabel);
+		layoutCassandra.addMember(lblNewLabel);
 		
 		dynamicForm_1 = new DynamicForm();
 		txtClusterName = new TextItem("newTextItem_1", "Cluster Name");
-		intReplicationFactor = new IntegerItem();
-		intReplicationFactor.setTitle("Replication Factor");
+		cbCassVersion = new ComboBoxItem("cbCassVersion", "Cassandra Version");
+		cbCassVersion.setValueMap("1.0");
+		cbCassVersion.setDefaultToFirstOption(true);
 		cbPartitioner = new ComboBoxItem("newComboBoxItem_3", "Partitioner");
 		cbPartitioner.setValueMap("Random Partitioner","Byte Ordered Partitioner");
 		cbPartitioner.setDefaultToFirstOption(true);
 		
-		dynamicForm_1.setFields(new FormItem[] { txtClusterName, intReplicationFactor, cbPartitioner });
-		LayoutCreateCluster.addMember(dynamicForm_1);
+		dynamicForm_1.setFields(new FormItem[] { txtClusterName, cbCassVersion, cbPartitioner });
+		layoutCassandra.addMember(dynamicForm_1);
 		
-		hardwareTab.setPane(LayoutCreateCluster);
+		cassandraTab.setPane(layoutCassandra);
+	}
+	
+	private void initCassandraConfigTuningTab() {
+		cassandraConfigTab = new Tab("3. Cassandra Config Tuning");
 		
-		cassManagementTab = new Tab("Cassandra Management");
-		
-		LayoutCassManagement = new VLayout();
-		LayoutCassManagement.setWidth("750");
-		
-		lblHardware_1 = new Label("Hardware");
-		lblHardware_1.setHeight("30");
-		LayoutCassManagement.addMember(lblHardware_1);
-		
-		runningNodesListGrid = new ListGrid();
-		runningNodesListGrid.setHeight("150");
-		runningNodesListGrid.setEmptyMessage("No nodes running.");
-		fieldName = new TreeGridField("fieldName", "Name");
-		fieldSize = new TreeGridField("fieldSize", "Size");
-		fieldIp = new TreeGridField("fieldIp", "IP");
-		fieldStopButton = new TreeGridField("fieldStopButton", "Stop", 60);
-		fieldStopButton.setType(ListGridFieldType.ICON);
-		fieldKillButton = new TreeGridField("fieldKillButton", "Kill", 60);
-		fieldKillButton.setType(ListGridFieldType.ICON);
-		runningNodesListGrid.setFields(new ListGridField[] { fieldName, fieldSize, fieldIp, fieldStopButton, fieldKillButton });
-		LayoutCassManagement.addMember(runningNodesListGrid);
-		
-		lblAddNodes = new Label("Add Nodes");
-		lblAddNodes.setHeight("30");
-		LayoutCassManagement.addMember(lblAddNodes);
-		
-		dynamicForm_2 = new DynamicForm();
-		intNumberOfNodes = new IntegerItem();
-		intNumberOfNodes.setTitle("Number of Nodes");
-		cbNodeSize = new ComboBoxItem("nodeSize", "Node size");
-		cbNodeSize.setValueMap("Large (m1.large)",
-				   "Extra Large (m1.xlarge)",
-				   "High-Memory Extra Large (m2.xlarge)",
-				   "High-Memory Double Extra Large (m2.2xlarge)",
-				   "High-Memory Quadruple Extra Large (m2.4xlarge)",
-				   "High-CPU Extra Large (c1.xlarge)");
-		cbNodeSize.setDefaultToFirstOption(true);
-		cbRegion = new ComboBoxItem("Region", "Region");
-		cbRegion.setValueMap("US East (Virginia)",
-							 "US West (Oregon)",
-							 "US West (California)",
-							 "EU West (Ireland)",
-							 "Asia Pacific (Singapore)",
-							 "Asia Pacific (Tokyo)");
-		cbRegion.setDefaultToFirstOption(true);
-		cbProviderNodes = new ComboBoxItem("newComboBoxItem_4", "Provider");
-		cbProviderNodes.setValueMap("Amazon EC2","1&1 Cloud");
-		cbProviderNodes.setDefaultToFirstOption(true);
-		
-		dynamicForm_2.setFields(new FormItem[] { cbProviderNodes, intNumberOfNodes, cbNodeSize, cbRegion});
-		LayoutCassManagement.addMember(dynamicForm_2);
-		cassManagementTab.setPane(LayoutCassManagement);
-		
-		
-		cassYamlTuningTab = new Tab("Cassandra YAML Tuning");
-		
-		LayoutCassYamlTuning = new VLayout();
+		layoutConfig = new VLayout();
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
 		lblNewLabel_1.setHeight("30");
-		LayoutCassYamlTuning.addMember(lblNewLabel_1);
+		layoutConfig.addMember(lblNewLabel_1);
 		
 		dynamicForm_3 = new DynamicForm();
 		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
@@ -305,11 +531,11 @@ public class Dashboard implements EntryPoint {
 		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
 		dynamicForm_3.setFields(new FormItem[] { rgHintedHandoff, intMaxWindowTime, intThrottleDelay});
-		LayoutCassYamlTuning.addMember(dynamicForm_3);
+		layoutConfig.addMember(dynamicForm_3);
 		
 		lblNewLabel_2 = new Label("Commit Log");
 		lblNewLabel_2.setHeight(30);
-		LayoutCassYamlTuning.addMember(lblNewLabel_2);
+		layoutConfig.addMember(lblNewLabel_2);
 		
 		dynamicForm_4 = new DynamicForm();
 		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
@@ -320,49 +546,39 @@ public class Dashboard implements EntryPoint {
 		intCommitlogTotalSpace = new IntegerItem();
 		intCommitlogTotalSpace.setTitle("commitlog_total_space (0 = unlimited) (mb)");
 		dynamicForm_4.setFields(new FormItem[] { cbSyncType, intTimeWindows, intCommitlogTotalSpace});
-		LayoutCassYamlTuning.addMember(dynamicForm_4);
+		layoutConfig.addMember(dynamicForm_4);
 		
 		lblNewLabel_3 = new Label("Garbage Collection");
 		lblNewLabel_3.setHeight(30);
-		LayoutCassYamlTuning.addMember(lblNewLabel_3);
+		layoutConfig.addMember(lblNewLabel_3);
 		
 		dynamicForm_5 = new DynamicForm();
-		floatFlushLargestMemtableAt = new FloatItem("floatFlushLargestMemtableAt", "Flush largest memtable at");
 		floatReduceCacheAt = new FloatItem("floatReduceCacheAt", "Reduce cache at");
 		floatReduceCacheCapacity = new FloatItem("floatReduceCacheCapacity", "Reduce cache capacity");
-		dynamicForm_5.setFields(new FormItem[] { floatFlushLargestMemtableAt, floatReduceCacheAt, floatReduceCacheCapacity });
-		LayoutCassYamlTuning.addMember(dynamicForm_5);
+		dynamicForm_5.setFields(new FormItem[] { floatReduceCacheAt, floatReduceCacheCapacity });
+		layoutConfig.addMember(dynamicForm_5);
 		
 		lblNewLabel_4 = new Label("Read/Write");
 		lblNewLabel_4.setHeight(30);
-		LayoutCassYamlTuning.addMember(lblNewLabel_4);
+		layoutConfig.addMember(lblNewLabel_4);
 		
 		dynamicForm_6 = new DynamicForm();
 		intConcurrentReads = new IntegerItem("intConcurrentReads", "Concurrent Reads");
 		intConcurrentWrites = new IntegerItem("intConcurrentWrites", "Concurrent Writes");
 		dynamicForm_6.setFields(new FormItem[] { intConcurrentReads, intConcurrentWrites });
-		LayoutCassYamlTuning.addMember(dynamicForm_6);
+		layoutConfig.addMember(dynamicForm_6);
 		
 		lblNewLabel_5 = new Label("Memtable");
 		lblNewLabel_5.setHeight(30);
-		LayoutCassYamlTuning.addMember(lblNewLabel_5);
+		layoutConfig.addMember(lblNewLabel_5);
 		
 		dynamicForm_7 = new DynamicForm();
 		intMemtableTotalSpace = new IntegerItem("intMemtableTotalSpace", "Memtable total space (0 = unlimited) (mb)");
 		intMemtableWriterThreads = new IntegerItem("intMemtableWriterThreads", "Memtable writer threads (0 = automatic)");
-		dynamicForm_7.setFields(new FormItem[] { intMemtableTotalSpace, intMemtableWriterThreads });
-		LayoutCassYamlTuning.addMember(dynamicForm_7);
+		intFlushFraction = new IntegerItem("intFlushFraction", "Flush fraction (%)");
+		dynamicForm_7.setFields(new FormItem[] { intMemtableTotalSpace, intMemtableWriterThreads, intFlushFraction });
+		layoutConfig.addMember(dynamicForm_7);
 		
-		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
-		
-		newClusterTabSet.addTab(hardwareTab);
-		newClusterTabSet.addTab(cassManagementTab);
-		newClusterTabSet.addTab(cassYamlTuningTab);
-		newClusterSection.addItem(newClusterTabSet);
-		rootPanel.add(sectionStack);
-	}
-	
-	protected ComboBoxItem getCbInstanceSize() {
-		return cbInstanceSize;
+		cassandraConfigTab.setPane(layoutConfig);
 	}
 }
