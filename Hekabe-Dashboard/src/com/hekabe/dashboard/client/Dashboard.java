@@ -35,6 +35,10 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
+import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
+import com.smartgwt.client.widgets.form.fields.events.KeyUpEvent;
+import com.smartgwt.client.widgets.form.fields.events.KeyUpHandler;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -73,7 +77,7 @@ public class Dashboard implements EntryPoint {
 	private TextItem txtClusterName;
 	private ComboBoxItem cbPartitioner;
 	private IntegerItem intReplicationFactor;
-	private ComboBoxItem cbInstanceSize;
+	protected static ComboBoxItem cbInstanceSize;
 	private IntegerItem intNumberOfInstances;
 	private ComboBoxItem cbProvider;
 	private VLayout LayoutCassManagement;
@@ -127,10 +131,15 @@ public class Dashboard implements EntryPoint {
 
 	private IntegerItem intMemtableWriterThreads;
 	
+	private ClientFunctions clientFunctions;
+	
+	
 	@Override
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("900", "800");
+		
+		clientFunctions = new ClientFunctions();
 		
 		lblHekabeDashboard = new Label("Hekabe Dashboard");
 		lblHekabeDashboard.setSize("150", "30");
@@ -153,6 +162,23 @@ public class Dashboard implements EntryPoint {
 		cbProvider.setShowTitle(true);
 		cbProvider.setTooltip("Choose Cloud-Provider.");
 		cbProvider.setValueMap("Amazon EC2","1&1 Cloud");
+		cbProvider.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {				
+				clientFunctions.changeProvider(cbProvider.getValueAsString());
+				//cbInstanceSize.setValue("cool");
+			}
+		});
+		cbProvider.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {				
+				clientFunctions.changeProvider(cbProvider.getValueAsString());
+			}
+		});
+		cbProvider.addKeyUpHandler(new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent event) {				
+				clientFunctions.changeProvider(cbProvider.getValueAsString());
+			}
+		});
+		
 		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
 		cbInstanceSize.setTooltip("Choose size of the instance(s).");
@@ -299,24 +325,8 @@ public class Dashboard implements EntryPoint {
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		tabSet.addTab(cassYamlTuningTab);
 		rootPanel.add(tabSet);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
+		
 	
 	
 	
