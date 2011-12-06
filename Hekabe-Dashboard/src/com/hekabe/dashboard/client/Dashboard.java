@@ -29,6 +29,10 @@ import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.SectionStack;
@@ -47,6 +51,7 @@ import com.smartgwt.client.widgets.tree.TreeGridField;
  * Cassandra YAML mit sinnvollen std. Werten füllen
  */
 public class Dashboard implements EntryPoint {
+	private DashboardFunctions df;
 	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
@@ -63,12 +68,12 @@ public class Dashboard implements EntryPoint {
 	private final CommunicationServiceAsync communicationService = GWT
 			.create(CommunicationService.class);
 	private TabSet newClusterTabSet;
-	private Tab createClusterTab;
+	private Tab hardwareTab;
 	private Tab cassManagementTab;
 	private Tab cassYamlTuningTab;
 	private Label lblHekabeDashboard;
 	private VLayout LayoutCreateCluster;
-	private Label lblHardware;
+	private Label lblProvider;
 	private DynamicForm dynamicForm;
 	private Label lblNewLabel;
 	private DynamicForm dynamicForm_1;
@@ -142,9 +147,13 @@ public class Dashboard implements EntryPoint {
 	private IntegerItem intNumberOfNodes;
 
 	private TabSet managementTabSet;
+
+	private TextItem textAccessKey;
 	
 	@Override
 	public void onModuleLoad() {
+		df = new DashboardFunctions();
+		
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("800", "600");
 		
@@ -170,13 +179,13 @@ public class Dashboard implements EntryPoint {
 		managementTabSet = new TabSet();
 		managementTabSet.setSize("750", "595");
 		
-		createClusterTab = new Tab("Create Cluster");
+		hardwareTab = new Tab("Hardware");
 		
 		LayoutCreateCluster = new VLayout();
 		
-		lblHardware = new Label("Hardware");
-		lblHardware.setHeight("30");
-		LayoutCreateCluster.addMember(lblHardware);
+		lblProvider = new Label("Provider");
+		lblProvider.setHeight("30");
+		LayoutCreateCluster.addMember(lblProvider);
 		
 		dynamicForm = new DynamicForm();
 		cbProvider = new ComboBoxItem("Provider", "Provider");
@@ -184,6 +193,16 @@ public class Dashboard implements EntryPoint {
 		cbProvider.setTooltip("Choose Cloud-Provider.");
 		cbProvider.setValueMap("Amazon EC2","1&1 Cloud");
 		cbProvider.setDefaultToFirstOption(true);
+		cbProvider.addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				df.providerChange("");
+			}
+			
+		});
+		
+		textAccessKey = new TextItem("", "");
 		cbInstanceSize = new ComboBoxItem("InstanceSize", "Instance size");
 		cbInstanceSize.setShowTitle(true);
 		cbInstanceSize.setTooltip("Choose size of the instance(s).");
@@ -215,7 +234,7 @@ public class Dashboard implements EntryPoint {
 		dynamicForm_1.setFields(new FormItem[] { txtClusterName, intReplicationFactor, cbPartitioner });
 		LayoutCreateCluster.addMember(dynamicForm_1);
 		
-		createClusterTab.setPane(LayoutCreateCluster);
+		hardwareTab.setPane(LayoutCreateCluster);
 		
 		cassManagementTab = new Tab("Cassandra Management");
 		
@@ -336,10 +355,14 @@ public class Dashboard implements EntryPoint {
 		
 		cassYamlTuningTab.setPane(LayoutCassYamlTuning);
 		
-		newClusterTabSet.addTab(createClusterTab);
+		newClusterTabSet.addTab(hardwareTab);
 		newClusterTabSet.addTab(cassManagementTab);
 		newClusterTabSet.addTab(cassYamlTuningTab);
 		newClusterSection.addItem(newClusterTabSet);
 		rootPanel.add(sectionStack);
+	}
+	
+	protected ComboBoxItem getCbInstanceSize() {
+		return cbInstanceSize;
 	}
 }
