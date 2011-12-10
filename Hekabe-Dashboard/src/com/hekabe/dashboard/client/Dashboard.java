@@ -73,162 +73,89 @@ public class Dashboard implements EntryPoint {
 	private DynamicForm dynamicForm_1;
 	private TextItem txtClusterName;
 	private ComboBoxItem cbPartitioner;
-	private IntegerItem intReplicationFactor;
 	private ComboBoxItem cbInstanceSize;
 	private IntegerItem intNumberOfInstances;
 	private ComboBoxItem cbProvider;
 	private VLayout layoutCassandra;
-	private Label lblHardware_1;
 	private ListGrid runningClusterListGrid;
 	private TreeGridField fieldName;
 	private TreeGridField fieldProvider;
 	private TreeGridField fieldNumberOfNodes;
-	private TreeGridField fieldStopButton;
-	private TreeGridField fieldKillButton;
-	private Label lblAddNodes;
-	private DynamicForm dynamicForm_2;
-	private ComboBoxItem cbNodeSize;
 	private ComboBoxItem cbRegion;
 	private ComboBoxItem cbProviderNodes;
 	private VLayout layoutNodeConfig;
 	private Label lblNewLabel_1;
 	private DynamicForm dynamicForm_3;
 	private RadioGroupItem rgHintedHandoff;
-
 	private IntegerItem intMaxWindowTime;
-
 	private IntegerItem intThrottleDelay;
 	private Label lblNewLabel_2;
 	private DynamicForm dynamicForm_4;
 	private ComboBoxItem cbSyncType;
-
 	private Label lblNewLabel_3;
-
 	private DynamicForm dynamicForm_5;
-
 	private FloatItem floatReduceCacheCapacity;
-
 	private FloatItem floatReduceCacheAt;
-
 	private Label lblNewLabel_4;
-
 	private DynamicForm dynamicForm_6;
-
 	private IntegerItem intConcurrentReads;
-
 	private IntegerItem intConcurrentWrites;
-
 	private Label lblNewLabel_5;
-
 	private IntegerItem intMemtableTotalSpace;
-
 	private DynamicForm dynamicForm_7;
-
 	private IntegerItem intMemtableWriterThreads;
-
 	private IntegerItem intTimeWindows;
-
 	private IntegerItem intCommitlogTotalSpace;
-
 	private SectionStack sectionStack;
-
 	private SectionStackSection managementSection;
-
 	private SectionStackSection newClusterSection;
-
 	private TabSet managementTabSet;
-
 	private TextItem txtAccessKey;
-
 	private TextItem txtSecretAccessKey;
-
 	private Label lblCluster;
-
 	private DynamicForm dynamicForm_01;
-
 	private ComboBoxItem cbCassVersion;
-
 	private IntegerItem intFlushFraction;
-
 	private Button btnSwitchToTab2;
-
 	private VLayout layoutManagement;
-
 	private Label lblRunningCluster;
-
 	private Tab nodeSummaryTab;
-
 	private ListGrid nodeListGrid;
-
 	private TreeGridField fieldIp;
-
 	private TreeGridField fieldStartCassandraButton;
-
 	private TreeGridField fieldStopCassandraButton;
-
 	private TreeGridField fieldStopInstance;
-
 	private VLayout layoutNewNode;
-
 	private DynamicForm dynamicForm_8;
-
 	private Label lblNewNode;
-
 	private TextItem txtAccessKeyNodes;
-
 	private TextItem txtSecretAccessKeyNodes;
-
 	private TextItem txtIpAddresses1and1;
-
 	private TextItem txtLoginName1and1;
-
 	private TextItem txtPass1and1;
-
 	private ComboBoxItem cbRegionNodes;
-
 	private Tab newNodeTab;
-
 	private Tab nodeConfigTab;
-
 	private DynamicForm dynamicForm_3_Nodes;
-
 	private RadioGroupItem rgHintedHandoffNodes;
-
 	private IntegerItem intMaxWindowTimeNodes;
-
 	private IntegerItem intThrottleDelayNodes;
-
 	private VLayout layoutConfig;
-
 	private DynamicForm dynamicForm_4_Nodes;
-
 	private ComboBoxItem cbSyncTypeNodes;
-
 	private IntegerItem intTimeWindowsNodes;
-
 	private IntegerItem intCommitlogTotalSpaceNodes;
-
 	private DynamicForm dynamicForm_5_Nodes;
-
 	private FloatItem floatReduceCacheAtNodes;
-
 	private FloatItem floatReduceCacheCapacityNodes;
-
 	private DynamicForm dynamicForm_6_Nodes;
-
 	private IntegerItem intConcurrentReadsNodes;
-
 	private IntegerItem intConcurrentWritesNodes;
-
 	private DynamicForm dynamicForm_7_Nodes;
-
 	private IntegerItem intMemtableTotalSpaceNodes;
-
 	private IntegerItem intMemtableWriterThreadsNodes;
-
 	private IntegerItem intFlushFractionNodes;
 	
-	@Override
 	public void onModuleLoad() {
 		df = new DashboardFunctions();
 		
@@ -439,7 +366,6 @@ public class Dashboard implements EntryPoint {
 		cbProvider.setDefaultToFirstOption(true);
 		cbProvider.addChangeHandler(new ChangeHandler() {
 			
-			@Override
 			public void onChange(ChangeEvent event) {
 				df.providerChange("");
 			}

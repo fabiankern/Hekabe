@@ -7,7 +7,6 @@ import com.hekabe.dashboard.client.CommunicationService;
 public class CommunicationServiceImpl extends RemoteServiceServlet implements
 		CommunicationService {
 
-	@Override
 	public String startInstance(Integer anzahlInstanzen) {
 		//escapeHtml(anzahlInstanzen);
 		
