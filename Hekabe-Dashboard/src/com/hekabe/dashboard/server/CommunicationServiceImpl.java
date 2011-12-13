@@ -36,11 +36,11 @@ public class CommunicationServiceImpl extends RemoteServiceServlet implements
 			e.printStackTrace();
 		}
 		
-		AmazonEC2 ec2USEast = new AmazonEC2Client(credentials);
-		ec2USEast.setEndpoint("ec2.us-east-1.amazonaws.com");
+		AmazonEC2 ec2Europe = new AmazonEC2Client(credentials);
+		ec2Europe.setEndpoint("ec2.eu-west-1.amazonaws.com");
 		
 		EC2CassandraCluster cluster = EC2CassandraCluster.initializeCluster(
-				ec2USEast, "ami-1a0f3d6e", instanceSize, numberOfInstances, "HekabeCassandra73",
+				ec2Europe,"ami-1a0f3d6e", instanceSize, numberOfInstances, "HekabeCassandra73",
 				"hekabetestkeypair2", "hekabetest", true);
 		
 		return null;
