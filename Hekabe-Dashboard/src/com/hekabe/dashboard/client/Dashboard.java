@@ -17,12 +17,15 @@ package com.hekabe.dashboard.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
@@ -155,12 +158,16 @@ public class Dashboard implements EntryPoint {
 	private IntegerItem intMemtableTotalSpaceNodes;
 	private IntegerItem intMemtableWriterThreadsNodes;
 	private IntegerItem intFlushFractionNodes;
+
+	private Button btnSwitchToTab3;
+
+	private Button btnStartNewCluster;
 	
 	public void onModuleLoad() {
 		df = new DashboardFunctions();
 		
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setSize("800", "600");
+		rootPanel.setSize("1000", "900");
 		
 		lblHekabeDashboard = new Label("Hekabe Dashboard");
 		lblHekabeDashboard.setSize("150", "30");
@@ -169,7 +176,8 @@ public class Dashboard implements EntryPoint {
 		
 		sectionStack = new SectionStack();
 		sectionStack.setVisibilityMode(VisibilityMode.MUTEX);
-		sectionStack.setSize("750", "650");
+		//sectionStack.setSize("750", "650");
+		sectionStack.setSize("1000", "900");
 		
 		managementSection = new SectionStackSection("Management");
 		managementSection.setExpanded(true);
@@ -177,15 +185,16 @@ public class Dashboard implements EntryPoint {
 		newClusterSection.setExpanded(false);
 		
 		newClusterTabSet = new TabSet();
-		newClusterTabSet.setSize("750", "595");
+		newClusterTabSet.setSize("1000", "850");
 		managementTabSet = new TabSet();
-		managementTabSet.setSize("750", "595");
+		managementTabSet.setSize("1000", "850");
 
 		initNewClusterSection();
 		initManagementSection();
 		
 		sectionStack.addSection(managementSection);
 		sectionStack.addSection(newClusterSection);
+		sectionStack.expandSection(1);
 		
 		rootPanel.add(sectionStack);
 	}
@@ -199,6 +208,8 @@ public class Dashboard implements EntryPoint {
 		newClusterTabSet.addTab(cassandraTab);
 		newClusterTabSet.addTab(cassandraConfigTab);
 		newClusterSection.addItem(newClusterTabSet);
+		newClusterTabSet.disableTab(1);
+		newClusterTabSet.disableTab(2);
 	}
 	
 	private void initManagementSection() {
@@ -346,7 +357,7 @@ public class Dashboard implements EntryPoint {
 
 	private void initSchemaTab() {
 		// TODO Auto-generated method stub
-		
+		// Manage keyspaces and column families
 	}
 
 	private void initHardwareTab() {
@@ -411,6 +422,16 @@ public class Dashboard implements EntryPoint {
 		LayoutCreateCluster.addMember(dynamicForm_01);
 		
 		btnSwitchToTab2 = new Button("Next");
+		
+		// TODO Remove click handler for MVP framework
+		btnSwitchToTab2.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				newClusterTabSet.enableTab(cassandraTab);
+				newClusterTabSet.selectTab(cassandraTab);
+			}
+		});
+
 		LayoutCreateCluster.addMember(btnSwitchToTab2);
 		
 		hardwareTab.setPane(LayoutCreateCluster);
@@ -437,6 +458,19 @@ public class Dashboard implements EntryPoint {
 		
 		dynamicForm_1.setFields(new FormItem[] { txtClusterName, cbCassVersion, cbPartitioner });
 		layoutCassandra.addMember(dynamicForm_1);
+		
+		btnSwitchToTab3 = new Button("Next");
+		
+		// TODO Remove click handler for MVP framework
+		btnSwitchToTab3.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				newClusterTabSet.enableTab(cassandraConfigTab);
+				newClusterTabSet.selectTab(cassandraConfigTab);
+			}
+		});
+		
+		layoutCassandra.addMember(btnSwitchToTab3);
 		
 		cassandraTab.setPane(layoutCassandra);
 	}
@@ -504,6 +538,29 @@ public class Dashboard implements EntryPoint {
 		intFlushFraction = new IntegerItem("intFlushFraction", "Flush fraction (%)");
 		dynamicForm_7.setFields(new FormItem[] { intMemtableTotalSpace, intMemtableWriterThreads, intFlushFraction });
 		layoutConfig.addMember(dynamicForm_7);
+		
+		btnStartNewCluster = new Button("Start Cluster");
+		
+		// TODO Remove click handler for MVP framework
+		btnStartNewCluster.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				communicationService.demo("ami-1a0f3d6e", "m1.large", 2, new AsyncCallback<String>() {
+					
+					public void onSuccess(String result) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}
+		});
+		
+		layoutConfig.addMember(btnStartNewCluster);		
 		
 		cassandraConfigTab.setPane(layoutConfig);
 	}
