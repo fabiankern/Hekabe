@@ -1,14 +1,6 @@
 package com.hekabe.dashboard.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.PropertiesCredentials;
-import com.amazonaws.services.ec2.AmazonEC2;
-import com.amazonaws.services.ec2.AmazonEC2Client;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.hekabe.cassandra.cluster.EC2CassandraCluster;
 import com.hekabe.dashboard.client.CommunicationService;
 
 @SuppressWarnings("serial")
@@ -25,7 +17,7 @@ public class CommunicationServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public String demo(String amiID, String instanceSize, int numberOfInstances) {
-		InputStream credentialsAsStream = Thread.currentThread()
+		/*InputStream credentialsAsStream = Thread.currentThread()
 				.getContextClassLoader()
 				.getResourceAsStream("AwsCredentials.properties");
 		AWSCredentials credentials = null;
@@ -42,7 +34,7 @@ public class CommunicationServiceImpl extends RemoteServiceServlet implements
 		EC2CassandraCluster cluster = EC2CassandraCluster.initializeCluster(
 				ec2Europe,"ami-1a0f3d6e", instanceSize, numberOfInstances, "HekabeCassandra73",
 				"hekabetestkeypair2", "hekabetest", true);
-		
+		*/
 		return null;
 	}
 	

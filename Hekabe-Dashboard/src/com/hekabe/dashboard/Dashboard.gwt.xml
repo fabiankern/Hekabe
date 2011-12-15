@@ -1,4 +1,4 @@
-<module>
+<module rename-to="hekabe">
 	<inherits name="com.google.gwt.user.User"/>
 	<inherits name="com.smartgwt.SmartGwt" />
 	<!-- <inherits name="com.google.gwt.user.theme.standard.Standard"/> -->
