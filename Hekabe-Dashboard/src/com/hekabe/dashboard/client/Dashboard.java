@@ -16,53 +16,31 @@
 package com.hekabe.dashboard.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.ListGridFieldType;
+import com.hekabe.dashboard.client.view.MgmtView;
+import com.hekabe.dashboard.client.view.NewClusterView;
 import com.smartgwt.client.types.VisibilityMode;
-import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
-import com.smartgwt.client.widgets.form.fields.FloatItem;
-import com.smartgwt.client.widgets.form.fields.FormItem;
-import com.smartgwt.client.widgets.form.fields.IntegerItem;
-import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
-import com.smartgwt.client.widgets.form.fields.TextItem;
-import com.smartgwt.client.widgets.form.fields.events.ChangeEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangeHandler;
-import com.smartgwt.client.widgets.grid.ListGrid;
-import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.SectionStack;
 import com.smartgwt.client.widgets.layout.SectionStackSection;
-import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.widgets.tab.Tab;
-import com.smartgwt.client.widgets.tab.TabSet;
-import com.smartgwt.client.widgets.tree.TreeGridField;
 
 /**
  * Cassandra YAML mit sinnvollen std. Werten füllen
  */
 public class Dashboard implements EntryPoint {
-	private DashboardFunctions df;
 	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
 	 */
-	private static final String SERVER_ERROR = "An error occurred while "
+	/*private static final String SERVER_ERROR = "An error occurred while "
 			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+			+ "connection and try again.";*/
 	
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
 	
-	private final CommunicationServiceAsync communicationService = GWT
+	/*private final CommunicationServiceAsync communicationService = GWT
 			.create(CommunicationService.class);
 	private TabSet newClusterTabSet;
 	private Tab hardwareTab;
@@ -108,11 +86,11 @@ public class Dashboard implements EntryPoint {
 	private DynamicForm dynamicForm_7;
 	private IntegerItem intMemtableWriterThreads;
 	private IntegerItem intTimeWindows;
-	private IntegerItem intCommitlogTotalSpace;
+	private IntegerItem intCommitlogTotalSpace;*/
 	private SectionStack sectionStack;
 	private SectionStackSection managementSection;
 	private SectionStackSection newClusterSection;
-	private TabSet managementTabSet;
+	/*private TabSet managementTabSet;
 	private TextItem txtAccessKey;
 	private TextItem txtSecretAccessKey;
 	private Label lblCluster;
@@ -161,30 +139,25 @@ public class Dashboard implements EntryPoint {
 
 	private Button btnSwitchToTab3;
 
-	private Button btnStartNewCluster;
+	private Button btnStartNewCluster;*/
 	
 	public void onModuleLoad() {
-		df = new DashboardFunctions();
+		/*df = new DashboardFunctions();*/
 		
-		RootPanel rootPanel = RootPanel.get();
+		RootPanel rootPanel = RootPanel.get("content");
 		rootPanel.setSize("1000", "900");
 		
-		lblHekabeDashboard = new Label("Hekabe Dashboard");
-		lblHekabeDashboard.setSize("150", "30");
-		lblHekabeDashboard.setAlign(Alignment.CENTER);
-		rootPanel.add(lblHekabeDashboard);
+		MgmtView mgmtView = new MgmtView();
+		NewClusterView newClusterView = new NewClusterView();
 		
 		sectionStack = new SectionStack();
 		sectionStack.setVisibilityMode(VisibilityMode.MUTEX);
-		//sectionStack.setSize("750", "650");
-		sectionStack.setSize("1000", "900");
+		sectionStack.setSize("500", "500");
 		
 		managementSection = new SectionStackSection("Management");
-		managementSection.setExpanded(true);
 		newClusterSection = new SectionStackSection("New Cluster");
-		newClusterSection.setExpanded(false);
 		
-		newClusterTabSet = new TabSet();
+		/*newClusterTabSet = new TabSet();
 		newClusterTabSet.setSize("1000", "850");
 		managementTabSet = new TabSet();
 		managementTabSet.setSize("1000", "850");
@@ -194,12 +167,22 @@ public class Dashboard implements EntryPoint {
 		
 		sectionStack.addSection(managementSection);
 		sectionStack.addSection(newClusterSection);
+				
+		managementSection.addItem(cluster.getPane());
+		managementSection.addItem(details.getPane());*/
+		
+		managementSection.addItem(mgmtView.getPane());
+		newClusterSection.addItem(newClusterView.getPane());
+		
+		sectionStack.addSection(managementSection);
+		sectionStack.addSection(newClusterSection);		
+		
 		sectionStack.expandSection(1);
 		
 		rootPanel.add(sectionStack);
 	}
 	
-	private void initNewClusterSection() {
+	/*private void initNewClusterSection() {
 		initHardwareTab();
 		initCassandraTab();
 		initCassandraConfigTuningTab();
@@ -210,9 +193,9 @@ public class Dashboard implements EntryPoint {
 		newClusterSection.addItem(newClusterTabSet);
 		newClusterTabSet.disableTab(1);
 		newClusterTabSet.disableTab(2);
-	}
+	}*/
 	
-	private void initManagementSection() {
+	/*private void initManagementSection() {
 		layoutManagement = new VLayout();
 		
 		initClusterTable();		
@@ -228,9 +211,9 @@ public class Dashboard implements EntryPoint {
 		
 		layoutManagement.addMember(managementTabSet);
 		managementSection.addItem(layoutManagement);
-	}
+	}*/
 	
-	private void initClusterTable() {
+	/*private void initClusterTable() {
 		lblRunningCluster = new Label("Cluster");
 		lblRunningCluster.setHeight(30);
 		layoutManagement.addMember(lblRunningCluster);
@@ -244,9 +227,9 @@ public class Dashboard implements EntryPoint {
 		runningClusterListGrid.setFields(new ListGridField[] { fieldName, fieldProvider, fieldNumberOfNodes });
 		
 		layoutManagement.addMember(runningClusterListGrid);
-	}
+	}*/
 
-	private void initNodeSummaryTab() {
+	/*private void initNodeSummaryTab() {
 		nodeSummaryTab = new Tab("Node Summary");
 		
 		nodeListGrid = new ListGrid();
@@ -262,9 +245,9 @@ public class Dashboard implements EntryPoint {
 		nodeListGrid.setFields(new ListGridField[] { fieldIp, fieldStartCassandraButton, fieldStopCassandraButton, fieldStopInstance });
 		
 		nodeSummaryTab.setPane(nodeListGrid);
-	}
+	}*/
 
-	private void initNewNodesTab() {
+	/*private void initNewNodesTab() {
 		newNodeTab = new Tab("New Node");
 		
 		layoutNewNode = new VLayout();
@@ -297,9 +280,9 @@ public class Dashboard implements EntryPoint {
 		
 		layoutNewNode.addMember(dynamicForm_8);
 		newNodeTab.setPane(layoutNewNode);
-	}
+	}*/
 
-	private void initConfigTab() {
+	/*private void initConfigTab() {
 		nodeConfigTab = new Tab("Config");
 		
 		layoutNodeConfig = new VLayout();
@@ -353,14 +336,14 @@ public class Dashboard implements EntryPoint {
 		layoutNodeConfig.addMember(dynamicForm_7_Nodes);
 		
 		nodeConfigTab.setPane(layoutNodeConfig);
-	}
+	}*/
 
-	private void initSchemaTab() {
+	/*private void initSchemaTab() {
 		// TODO Auto-generated method stub
 		// Manage keyspaces and column families
-	}
+	}*/
 
-	private void initHardwareTab() {
+	/*private void initHardwareTab() {
 		hardwareTab = new Tab("1. Hardware");
 		
 		LayoutCreateCluster = new VLayout();
@@ -435,9 +418,9 @@ public class Dashboard implements EntryPoint {
 		LayoutCreateCluster.addMember(btnSwitchToTab2);
 		
 		hardwareTab.setPane(LayoutCreateCluster);
-	}
+	}*/
 	
-	private void initCassandraTab() {
+	/*private void initCassandraTab() {
 		cassandraTab = new Tab("2. Cassandra");
 		
 		layoutCassandra = new VLayout();
@@ -473,9 +456,9 @@ public class Dashboard implements EntryPoint {
 		layoutCassandra.addMember(btnSwitchToTab3);
 		
 		cassandraTab.setPane(layoutCassandra);
-	}
+	}*/
 	
-	private void initCassandraConfigTuningTab() {
+	/*private void initCassandraConfigTuningTab() {
 		cassandraConfigTab = new Tab("3. Cassandra Config Tuning");
 		
 		layoutConfig = new VLayout();
@@ -563,5 +546,5 @@ public class Dashboard implements EntryPoint {
 		layoutConfig.addMember(btnStartNewCluster);		
 		
 		cassandraConfigTab.setPane(layoutConfig);
-	}
+	}*/
 }
