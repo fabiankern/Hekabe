@@ -16,6 +16,8 @@
 package com.hekabe.dashboard.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.hekabe.dashboard.client.view.MgmtView;
 import com.hekabe.dashboard.client.view.NewClusterView;
@@ -33,6 +35,10 @@ public class Dashboard implements EntryPoint {
 	private SectionStackSection newClusterSection;
 	
 	public void onModuleLoad() {
+		CommunicationServiceAsync rpcService = GWT.create(CommunicationService.class);
+		HandlerManager eventBus = new HandlerManager(null);
+		AppController appViewer = new AppController(rpcService, eventBus);
+		appViewer.go(RootPanel.get("container"));
 		
 		RootPanel rootPanel = RootPanel.get("content");
 		rootPanel.setSize("1200", "1200");
@@ -57,5 +63,4 @@ public class Dashboard implements EntryPoint {
 		
 		rootPanel.add(sectionStack);
 	}
-	
 }
