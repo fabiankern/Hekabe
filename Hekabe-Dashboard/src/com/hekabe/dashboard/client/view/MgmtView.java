@@ -1,5 +1,6 @@
 package com.hekabe.dashboard.client.view;
 
+import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 public class MgmtView extends VLayout {
@@ -14,5 +15,7 @@ public class MgmtView extends VLayout {
 		
 		addMember(cluster);
 		addMember(detail);
+		setOverflow(Overflow.VISIBLE);
+		setAutoHeight();
 	}
 }
