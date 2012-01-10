@@ -1,6 +1,5 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
@@ -10,9 +9,8 @@ import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class MgmtDetailConfigView extends Composite {
+public class MgmtDetailConfigView extends VLayout {
 
-	private VLayout layoutNodeConfig;
 	private DynamicForm dynamicForm_3_Nodes;
 	private RadioGroupItem rgHintedHandoffNodes;
 	private IntegerItem intMaxWindowTimeNodes;
@@ -38,8 +36,6 @@ public class MgmtDetailConfigView extends Composite {
 	private Label lblNewLabel_5;
 
 	public MgmtDetailConfigView() {
-		layoutNodeConfig = new VLayout();
-		layoutNodeConfig.setAutoDraw(false);
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
 		lblNewLabel_1.setHeight("30");
@@ -52,7 +48,7 @@ public class MgmtDetailConfigView extends Composite {
 		lblNewLabel_5 = new Label("Memtable");
 		lblNewLabel_5.setHeight(30);
 
-		layoutNodeConfig.addMember(lblNewLabel_1);
+		addMember(lblNewLabel_1);
 		
 		dynamicForm_3_Nodes = new DynamicForm();
 		rgHintedHandoffNodes = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
@@ -61,9 +57,9 @@ public class MgmtDetailConfigView extends Composite {
 		intMaxWindowTimeNodes = new IntegerItem("maxWindowTimeNodes", "Maximum Window Time (ms)");
 		intThrottleDelayNodes = new IntegerItem("throttleDelayNodes", "Throttle Delay (ms)");
 		dynamicForm_3_Nodes.setFields(new FormItem[] { rgHintedHandoffNodes, intMaxWindowTimeNodes, intThrottleDelayNodes });
-		layoutNodeConfig.addMember(dynamicForm_3_Nodes);
+		addMember(dynamicForm_3_Nodes);
 		
-		layoutNodeConfig.addMember(lblNewLabel_2);
+		addMember(lblNewLabel_2);
 		
 		dynamicForm_4_Nodes = new DynamicForm();
 		cbSyncTypeNodes = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
@@ -73,38 +69,32 @@ public class MgmtDetailConfigView extends Composite {
 		intCommitlogTotalSpaceNodes = new IntegerItem();
 		intCommitlogTotalSpaceNodes.setTitle("commitlog_total_space (0 = unlimited) (mb)");
 		dynamicForm_4_Nodes.setFields(new FormItem[] { cbSyncTypeNodes, intTimeWindowsNodes, intCommitlogTotalSpaceNodes});
-		layoutNodeConfig.addMember(dynamicForm_4_Nodes);
+		addMember(dynamicForm_4_Nodes);
 		
-		layoutNodeConfig.addMember(lblNewLabel_3);
+		addMember(lblNewLabel_3);
 		
 		dynamicForm_5_Nodes = new DynamicForm();
 		floatReduceCacheAtNodes = new FloatItem("floatReduceCacheAt", "Reduce cache at");
 		floatReduceCacheCapacityNodes = new FloatItem("floatReduceCacheCapacity", "Reduce cache capacity");
 		dynamicForm_5_Nodes.setFields(new FormItem[] { floatReduceCacheAtNodes, floatReduceCacheCapacityNodes });
-		layoutNodeConfig.addMember(dynamicForm_5_Nodes);
+		addMember(dynamicForm_5_Nodes);
 		
-		layoutNodeConfig.addMember(lblNewLabel_4);
+		addMember(lblNewLabel_4);
 		
 		dynamicForm_6_Nodes = new DynamicForm();
 		intConcurrentReadsNodes = new IntegerItem("intConcurrentReads", "Concurrent Reads");
 		intConcurrentWritesNodes = new IntegerItem("intConcurrentWrites", "Concurrent Writes");
 		dynamicForm_6_Nodes.setFields(new FormItem[] { intConcurrentReadsNodes, intConcurrentWritesNodes });
-		layoutNodeConfig.addMember(dynamicForm_6_Nodes);
+		addMember(dynamicForm_6_Nodes);
 
-		layoutNodeConfig.addMember(lblNewLabel_5);
+		addMember(lblNewLabel_5);
 		
 		dynamicForm_7_Nodes = new DynamicForm();
 		intMemtableTotalSpaceNodes = new IntegerItem("intMemtableTotalSpace", "Memtable total space (0 = unlimited) (mb)");
 		intMemtableWriterThreadsNodes = new IntegerItem("intMemtableWriterThreads", "Memtable writer threads (0 = automatic)");
 		intFlushFractionNodes = new IntegerItem("intFlushFraction", "Flush fraction (%)");
 		dynamicForm_7_Nodes.setFields(new FormItem[] { intMemtableTotalSpaceNodes, intMemtableWriterThreadsNodes, intFlushFractionNodes });
-		layoutNodeConfig.addMember(dynamicForm_7_Nodes);
 		
-		initWidget(layoutNodeConfig);
+		addMember(dynamicForm_7_Nodes);
 	}
-	
-	public VLayout getPane() {
-		return layoutNodeConfig;
-	}
-
 }

@@ -1,8 +1,6 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.widgets.Button;
-import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
@@ -11,9 +9,8 @@ import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class NewClusterHardwareView extends Composite {
+public class NewClusterHardwareView extends VLayout {
 	
-	private VLayout layoutCreateCluster;
 	private Label lblProvider;
 	private DynamicForm dynamicForm;
 	private ComboBoxItem cbProvider;
@@ -27,11 +24,9 @@ public class NewClusterHardwareView extends Composite {
 	private Button btnSwitchToTab2;
 
 	public NewClusterHardwareView() {		
-		layoutCreateCluster = new VLayout();
-		
 		lblProvider = new Label("Provider");
 		lblProvider.setHeight("30");
-		layoutCreateCluster.addMember(lblProvider);
+		addMember(lblProvider);
 		
 		dynamicForm = new DynamicForm();
 		cbProvider = new ComboBoxItem("Provider", "Provider");
@@ -44,11 +39,11 @@ public class NewClusterHardwareView extends Composite {
 		txtSecretAccessKey = new TextItem("txtSecretAccessKey", "Secret Access Key");
 		
 		dynamicForm.setFields(new FormItem[] { cbProvider, txtAccessKey, txtSecretAccessKey });
-		layoutCreateCluster.addMember(dynamicForm);
+		addMember(dynamicForm);
 		
 		lblCluster = new Label("Cluster");
 		lblCluster.setHeight("30");
-		layoutCreateCluster.addMember(lblCluster);
+		addMember(lblCluster);
 		
 		dynamicForm_01 = new DynamicForm();
 		intNumberOfInstances = new IntegerItem();
@@ -76,17 +71,10 @@ public class NewClusterHardwareView extends Composite {
 		cbInstanceSize.setDefaultToFirstOption(true);
 		
 		dynamicForm_01.setFields(new FormItem[] { intNumberOfInstances, cbRegion, cbInstanceSize });
-		layoutCreateCluster.addMember(dynamicForm_01);
+		addMember(dynamicForm_01);
 		
 		btnSwitchToTab2 = new Button("Next");
 
-		layoutCreateCluster.addMember(btnSwitchToTab2);
-		
-		initWidget(layoutCreateCluster);
+		addMember(btnSwitchToTab2);
 	}
-	
-	public Canvas getPane() {
-		return layoutCreateCluster;
-	}
-
 }

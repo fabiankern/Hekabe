@@ -1,29 +1,18 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class MgmtView extends Composite {
+public class MgmtView extends VLayout {
 
-	VLayout layout;
 	MgmtClustersView cluster;
 	MgmtDetailView detail;
 	
 	public MgmtView() {
-		layout = new VLayout();
-		layout.setAutoDraw(false);
 		
 		cluster = new MgmtClustersView();
 		detail = new MgmtDetailView();
 		
-		layout.addMember(cluster.getPane());
-		layout.addMember(detail.getPane());
-		
-		initWidget(layout);
+		addMember(cluster);
+		addMember(detail);
 	}
-	
-	public VLayout getPane() {
-		return layout;
-	}
-
 }

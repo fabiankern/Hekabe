@@ -1,6 +1,5 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
@@ -8,11 +7,10 @@ import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class MgmtDetailNewNodeView extends Composite {
+public class MgmtDetailNewNodeView extends VLayout {
 
-	private VLayout layoutNewNode;
 	private Label lblNewNode;
-	private DynamicForm dynamicForm_8;
+	private DynamicForm dynamicForm;
 	private ComboBoxItem cbProviderNodes;
 	private TextItem txtAccessKeyNodes;
 	private TextItem txtSecretAccessKeyNodes;
@@ -22,14 +20,12 @@ public class MgmtDetailNewNodeView extends Composite {
 	private ComboBoxItem cbRegionNodes;
 
 	public MgmtDetailNewNodeView() {
-		layoutNewNode = new VLayout();
-		layoutNewNode.setAutoDraw(false);
 		
 		lblNewNode = new Label("New Node");
 		lblNewNode.setHeight(30);
-		layoutNewNode.addMember(lblNewNode);
+		addMember(lblNewNode);
 		
-		dynamicForm_8 = new DynamicForm();
+		dynamicForm = new DynamicForm();
 		cbProviderNodes = new ComboBoxItem("cbProviderNodes", "Provider");
 		cbProviderNodes.setValueMap("Amazon EC2","1&1 Cloud");
 		cbProviderNodes.setDefaultToFirstOption(true);
@@ -47,17 +43,10 @@ public class MgmtDetailNewNodeView extends Composite {
 							 "Asia Pacific (Tokyo)");
 		cbRegionNodes.setDefaultToFirstOption(true);
 		
-		dynamicForm_8.setFields(new FormItem[] { cbProviderNodes, txtAccessKeyNodes, 
+		dynamicForm.setFields(new FormItem[] { cbProviderNodes, txtAccessKeyNodes, 
 				txtSecretAccessKeyNodes, txtIpAddresses1and1, txtLoginName1and1,
 				txtPass1and1, cbRegionNodes });
 		
-		layoutNewNode.addMember(dynamicForm_8);
-		
-		initWidget(layoutNewNode);
+		addMember(dynamicForm);
 	}
-	
-	public VLayout getPane() {
-		return layoutNewNode;
-	}
-
 }

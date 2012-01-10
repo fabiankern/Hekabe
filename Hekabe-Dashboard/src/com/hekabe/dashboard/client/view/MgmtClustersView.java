@@ -1,12 +1,11 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
+import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 
-public class MgmtClustersView extends Composite {
+public class MgmtClustersView extends VLayout {
 	private ListGrid runningClusterListGrid;
 	private ListGridField fieldName;
 	private ListGridField fieldProvider;
@@ -23,22 +22,6 @@ public class MgmtClustersView extends Composite {
 		fieldNumberOfNodes = new TreeGridField("fieldNumberOfNodes", "Number of nodes");
 		runningClusterListGrid.setFields(new ListGridField[] { fieldName, fieldProvider, fieldNumberOfNodes });
 		
-		//runningClusterListGrid.setData(a());
-		
-		initWidget(runningClusterListGrid);
-	}
-
-	public ListGrid getPane() {
-		return runningClusterListGrid;
-	}
-	
-	public ListGridRecord[] a() {
-		ListGridRecord[] result = new ListGridRecord[1];
-		
-		result[0].setAttribute("fieldName", "NAME");
-		result[0].setAttribute("fieldProvider", "Provider");
-		result[0].setAttribute("fieldNumberOfNodes", "NUMBER OF NODES");
-		
-		return result;
+		addMember(runningClusterListGrid);
 	}
 }

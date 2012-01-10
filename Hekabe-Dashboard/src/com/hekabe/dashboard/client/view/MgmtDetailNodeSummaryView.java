@@ -1,13 +1,13 @@
 package com.hekabe.dashboard.client.view;
 
-import com.google.gwt.user.client.ui.Composite;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 
-public class MgmtDetailNodeSummaryView extends Composite {
-
+public class MgmtDetailNodeSummaryView extends VLayout {
+	
 	private ListGrid nodeListGrid;
 	private TreeGridField fieldIp;
 	private TreeGridField fieldStartCassandraButton;
@@ -15,6 +15,7 @@ public class MgmtDetailNodeSummaryView extends Composite {
 	private TreeGridField fieldStopInstance;
 
 	public MgmtDetailNodeSummaryView() {
+		
 		nodeListGrid = new ListGrid();
 		nodeListGrid.setAutoDraw(false);
 		
@@ -29,11 +30,6 @@ public class MgmtDetailNodeSummaryView extends Composite {
 		fieldStopInstance.setType(ListGridFieldType.ICON);
 		nodeListGrid.setFields(new ListGridField[] { fieldIp, fieldStartCassandraButton, fieldStopCassandraButton, fieldStopInstance });
 		
-		initWidget(nodeListGrid);
+		addMember(nodeListGrid);
 	}
-	
-	public ListGrid getPane() {
-		return nodeListGrid;
-	}
-
 }
