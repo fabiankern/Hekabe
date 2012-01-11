@@ -1,7 +1,9 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.presenter.NewClusterHardwarePresenter;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
+import com.smartgwt.client.widgets.events.HasClickHandlers;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -9,7 +11,7 @@ import com.smartgwt.client.widgets.form.fields.IntegerItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class NewClusterHardwareView extends VLayout {
+public class NewClusterHardwareView extends VLayout implements NewClusterHardwarePresenter.Display {
 	
 	private Label lblProvider;
 	private DynamicForm dynamicForm;
@@ -76,5 +78,33 @@ public class NewClusterHardwareView extends VLayout {
 		btnSwitchToTab2 = new Button("Next");
 
 		addMember(btnSwitchToTab2);
+	}
+
+	public HasClickHandlers getNextButton() {
+		return btnSwitchToTab2;
+	}
+
+	public String getProvider() {
+		return cbProvider.getValueAsString();
+	}
+
+	public String getSecretAccessKey() {
+		return txtSecretAccessKey.getValueAsString();
+	}
+
+	public int getNumberOfInstances() {
+		return intNumberOfInstances.getValueAsInteger();
+	}
+
+	public String getRegion() {
+		return cbRegion.getValueAsString();
+	}
+
+	public String getInstanceSize() {
+		return cbInstanceSize.getValueAsString();
+	}
+	
+	public VLayout asVLayout() {
+		return this;
 	}
 }

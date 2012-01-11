@@ -38,7 +38,7 @@ public class Dashboard implements EntryPoint {
 		CommunicationServiceAsync rpcService = GWT.create(CommunicationService.class);
 		HandlerManager eventBus = new HandlerManager(null);
 		AppController appViewer = new AppController(rpcService, eventBus);
-		appViewer.go(RootPanel.get("container"));
+		appViewer.go(RootPanel.get("content"));
 		
 		RootPanel rootPanel = RootPanel.get("content");
 		rootPanel.setSize("1200", "1200");
