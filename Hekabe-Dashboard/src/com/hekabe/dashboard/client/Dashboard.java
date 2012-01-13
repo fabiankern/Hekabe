@@ -17,7 +17,6 @@ package com.hekabe.dashboard.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.hekabe.dashboard.client.view.MgmtView;
 import com.hekabe.dashboard.client.view.NewClusterView;
@@ -25,26 +24,22 @@ import com.smartgwt.client.types.VisibilityMode;
 import com.smartgwt.client.widgets.layout.SectionStack;
 import com.smartgwt.client.widgets.layout.SectionStackSection;
 
-/**
- * Cassandra YAML mit sinnvollen std. Werten füllen
- */
 public class Dashboard implements EntryPoint {
 	
 	private SectionStack sectionStack;
 	private SectionStackSection managementSection;
 	private SectionStackSection newClusterSection;
+	private MgmtView mgmtView;
+	private NewClusterView newClusterView;
 	
 	public void onModuleLoad() {
 		CommunicationServiceAsync rpcService = GWT.create(CommunicationService.class);
-		HandlerManager eventBus = new HandlerManager(null);
-		AppController appViewer = new AppController(rpcService, eventBus);
-		appViewer.go(RootPanel.get("content"));
 		
 		RootPanel rootPanel = RootPanel.get("content");
 		rootPanel.setSize("1200", "1200");
 		
-		MgmtView mgmtView = new MgmtView();
-		NewClusterView newClusterView = new NewClusterView();
+		mgmtView = new MgmtView(this, rpcService);
+		newClusterView = new NewClusterView(this, rpcService);
 		
 		sectionStack = new SectionStack();
 		sectionStack.setVisibilityMode(VisibilityMode.MUTEX);
@@ -62,5 +57,13 @@ public class Dashboard implements EntryPoint {
 		sectionStack.expandSection(1);
 		
 		rootPanel.add(sectionStack);
+	}
+
+	public MgmtView getMgmtView() {
+		return mgmtView;
+	}
+
+	public NewClusterView getNewClusterView() {
+		return newClusterView;
 	}
 }

@@ -1,7 +1,10 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FloatItem;
@@ -20,7 +23,7 @@ public class NewClusterCassandraConfigView extends VLayout {
 	private Label lblNewLabel_2;
 	private DynamicForm dynamicForm_4;
 	private ComboBoxItem cbSyncType;
-	private IntegerItem intTimeWindows;
+	private IntegerItem intTimeWindow;
 	private IntegerItem intCommitlogTotalSpace;
 	private Label lblNewLabel_3;
 	private DynamicForm dynamicForm_5;
@@ -36,8 +39,12 @@ public class NewClusterCassandraConfigView extends VLayout {
 	private IntegerItem intMemtableWriterThreads;
 	private IntegerItem intFlushFraction;
 	private Button btnStartNewCluster;
+	private NewClusterView newClusterView;
+	private CommunicationServiceAsync rpcService;
 
-	public NewClusterCassandraConfigView() {
+	public NewClusterCassandraConfigView(NewClusterView newClusterView, CommunicationServiceAsync rpcService) {
+		this.newClusterView = newClusterView; 
+		this.rpcService = rpcService;
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
 		lblNewLabel_1.setHeight("30");
@@ -60,11 +67,11 @@ public class NewClusterCassandraConfigView extends VLayout {
 		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
 		cbSyncType.setValueMap("periodic",
 							   "batch");
-		intTimeWindows = new IntegerItem();
-		intTimeWindows.setTitle("Time window (ms)");
+		intTimeWindow = new IntegerItem();
+		intTimeWindow.setTitle("Time window (ms)");
 		intCommitlogTotalSpace = new IntegerItem();
 		intCommitlogTotalSpace.setTitle("commitlog_total_space (0 = unlimited) (mb)");
-		dynamicForm_4.setFields(new FormItem[] { cbSyncType, intTimeWindows, intCommitlogTotalSpace});
+		dynamicForm_4.setFields(new FormItem[] { cbSyncType, intTimeWindow, intCommitlogTotalSpace});
 		addMember(dynamicForm_4);
 		
 		lblNewLabel_3 = new Label("Garbage Collection");
@@ -99,7 +106,109 @@ public class NewClusterCassandraConfigView extends VLayout {
 		addMember(dynamicForm_7);
 		
 		btnStartNewCluster = new Button("Start Cluster");
-		
+				
 		addMember(btnStartNewCluster);
+		
+		bind();
 	}
+
+	private void bind() {
+		btnStartNewCluster.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+
+	/**
+	 * 
+	 * @return Returns 'true' if enabled, else 'false'.
+	 */
+	public boolean getHintedHandoff() {
+		if("Enabled".equals(rgHintedHandoff.getValueAsString())) {
+			return true;			
+		} else {
+			return false;
+		}
+	}
+
+	public int getMaxWindowTime() {
+		return intMaxWindowTime.getValueAsInteger();
+	}
+
+	public int getThrottleDelay() {
+		return intThrottleDelay.getValueAsInteger();
+	}
+
+	public String getSyncType() {
+		return cbSyncType.getValueAsString();
+	}
+
+	public int getTimeWindow() {
+		return intTimeWindow.getValueAsInteger();
+	}
+
+	public int getCommitlogTotalSpace() {
+		return intCommitlogTotalSpace.getValueAsInteger();
+	}
+
+	public float getReduceCacheAt() {
+		return floatReduceCacheAt.getValueAsFloat();
+	}
+
+	public float getReduceCacheCapacity() {
+		return floatReduceCacheCapacity.getValueAsFloat();
+	}
+
+	public int getConcurrentReads() {
+		return intConcurrentReads.getValueAsInteger();
+	}
+
+	public int getConcurrentWrites() {
+		return intConcurrentWrites.getValueAsInteger();
+	}
+
+	public int getMemtableTotalSpace() {
+		return intMemtableTotalSpace.getValueAsInteger();
+	}
+
+	public int getMemtableWriterThreads() {
+		return intMemtableWriterThreads.getValueAsInteger();
+	}
+
+	public int getFlushFraction() {
+		return intFlushFraction.getValueAsInteger();
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

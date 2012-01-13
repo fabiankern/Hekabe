@@ -1,22 +1,28 @@
 package com.hekabe.dashboard.client.view;
 
-import com.hekabe.dashboard.client.presenter.NewClusterPresenter;
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
+import com.hekabe.dashboard.client.Dashboard;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 
-public class NewClusterView extends VLayout implements NewClusterPresenter.Display {
+public class NewClusterView extends VLayout {
 
 	VLayout layout = new VLayout();
 	TabSet newClusterTabSet = new TabSet();
 	Tab hardwareTab = new Tab("1. Hardware");
 	Tab cassandraTab = new Tab("2. Cassandra");
 	Tab cassandraConfigTab = new Tab("3. Cassandra Config Tuning");
+	Dashboard dashboard;
+	CommunicationServiceAsync rpcService;
 	
-	public NewClusterView() {		
-		NewClusterHardwareView hardware = new NewClusterHardwareView();
-		NewClusterCassandraView cassandra = new NewClusterCassandraView();
-		NewClusterCassandraConfigView cassandraConfig = new NewClusterCassandraConfigView();
+	public NewClusterView(Dashboard dashboard, CommunicationServiceAsync rpcService) {
+		this.dashboard = dashboard;
+		this.rpcService = rpcService;
+		
+		NewClusterHardwareView hardware = new NewClusterHardwareView(this, rpcService);
+		NewClusterCassandraView cassandra = new NewClusterCassandraView(this, rpcService);
+		NewClusterCassandraConfigView cassandraConfig = new NewClusterCassandraConfigView(this, rpcService);
 		
 		hardwareTab.setPane(hardware);
 		cassandraTab.setPane(cassandra);
@@ -31,15 +37,7 @@ public class NewClusterView extends VLayout implements NewClusterPresenter.Displ
 		addMember(newClusterTabSet);
 	}
 
-	public VLayout getPane() {
-		return layout;
-	}
-
 	public TabSet getTabSet() {
 		return newClusterTabSet;
-	}
-
-	public VLayout asVLayout() {
-		return this;
 	}
 }

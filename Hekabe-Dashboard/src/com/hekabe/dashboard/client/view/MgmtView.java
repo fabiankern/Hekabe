@@ -1,21 +1,35 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
+import com.hekabe.dashboard.client.Dashboard;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 public class MgmtView extends VLayout {
 
-	MgmtClustersView cluster;
-	MgmtDetailView detail;
+	private MgmtClustersView clusterView;
+	private MgmtDetailView detailView;
+	private Dashboard dashboard;
+	private CommunicationServiceAsync rpcService;
 	
-	public MgmtView() {
+	public MgmtView(Dashboard dashboard, CommunicationServiceAsync rpcService) {
+		this.dashboard = dashboard;
+		this.rpcService = rpcService;
 		
-		cluster = new MgmtClustersView();
-		detail = new MgmtDetailView();
+		clusterView = new MgmtClustersView(this, rpcService);
+		detailView = new MgmtDetailView(this, rpcService);
 		
-		addMember(cluster);
-		addMember(detail);
+		addMember(clusterView);
+		addMember(detailView);
 		setOverflow(Overflow.VISIBLE);
 		setAutoHeight();
+	}
+
+	public MgmtClustersView getClusterView() {
+		return clusterView;
+	}
+
+	public MgmtDetailView getDetailView() {
+		return detailView;
 	}
 }

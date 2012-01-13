@@ -1,22 +1,28 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 
 public class MgmtDetailView extends VLayout {
 	
-	TabSet mgmtTabSet = new TabSet();
-	Tab nodeSummaryTab = new Tab("Node Summary");
-	Tab newNodeTab = new Tab("New Node");
-	Tab configTab = new Tab("Config");
+	private TabSet mgmtTabSet = new TabSet();
+	private Tab nodeSummaryTab = new Tab("Node Summary");
+	private Tab newNodeTab = new Tab("New Node");
+	private Tab configTab = new Tab("Config");
+	private MgmtView mgmtView;
+	private CommunicationServiceAsync rpcService;
 
-	public MgmtDetailView() {		
+	public MgmtDetailView(MgmtView mgmtView, CommunicationServiceAsync rpcService) {
+		this.mgmtView = mgmtView;
+		this.rpcService = rpcService;		
+		
 		mgmtTabSet.setPixelSize(1000, 400);
 		
-		MgmtDetailNodeSummaryView nodeSummary = new MgmtDetailNodeSummaryView();
-		MgmtDetailNewNodeView newNode = new MgmtDetailNewNodeView();
-		MgmtDetailConfigView config = new MgmtDetailConfigView();
+		MgmtDetailNodeSummaryView nodeSummary = new MgmtDetailNodeSummaryView(this, rpcService);
+		MgmtDetailNewNodeView newNode = new MgmtDetailNewNodeView(this, rpcService);
+		MgmtDetailConfigView config = new MgmtDetailConfigView(this, rpcService);
 		
 		nodeSummaryTab.setPane(nodeSummary);
 		newNodeTab.setPane(newNode);
@@ -27,5 +33,9 @@ public class MgmtDetailView extends VLayout {
 		mgmtTabSet.addTab(configTab);
 		
 		addMember(mgmtTabSet);
+	}
+
+	public TabSet getMgmtTabSet() {
+		return mgmtTabSet;
 	}
 }

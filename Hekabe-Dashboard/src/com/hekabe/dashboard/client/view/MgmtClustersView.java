@@ -1,5 +1,6 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.layout.VLayout;
@@ -10,8 +11,13 @@ public class MgmtClustersView extends VLayout {
 	private ListGridField fieldName;
 	private ListGridField fieldProvider;
 	private ListGridField fieldNumberOfNodes;
+	private MgmtView mgmtView;
+	private CommunicationServiceAsync rpcService;
 
-	public MgmtClustersView() {
+	public MgmtClustersView(MgmtView mgmtView, CommunicationServiceAsync rpcService) {
+		this.mgmtView = mgmtView;
+		this.rpcService = rpcService;
+		
 		runningClusterListGrid = new ListGrid();
 		runningClusterListGrid.setAutoDraw(false);
 		

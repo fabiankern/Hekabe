@@ -1,5 +1,6 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
@@ -13,8 +14,12 @@ public class MgmtDetailNodeSummaryView extends VLayout {
 	private TreeGridField fieldStartCassandraButton;
 	private TreeGridField fieldStopCassandraButton;
 	private TreeGridField fieldStopInstance;
+	private MgmtDetailView mgmtDetailView;
+	private CommunicationServiceAsync rpcService;
 
-	public MgmtDetailNodeSummaryView() {
+	public MgmtDetailNodeSummaryView(MgmtDetailView mgmtDetailView, CommunicationServiceAsync rpcService) {
+		this.mgmtDetailView = mgmtDetailView;
+		this.rpcService = rpcService;
 		
 		nodeListGrid = new ListGrid();
 		nodeListGrid.setAutoDraw(false);

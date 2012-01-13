@@ -1,5 +1,6 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.CommunicationServiceAsync;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
@@ -17,7 +18,7 @@ public class MgmtDetailConfigView extends VLayout {
 	private IntegerItem intThrottleDelayNodes;
 	private DynamicForm dynamicForm_4_Nodes;
 	private ComboBoxItem cbSyncTypeNodes;
-	private IntegerItem intTimeWindowsNodes;
+	private IntegerItem intTimeWindowNodes;
 	private IntegerItem intCommitlogTotalSpaceNodes;
 	private DynamicForm dynamicForm_5_Nodes;
 	private FloatItem floatReduceCacheAtNodes;
@@ -34,8 +35,12 @@ public class MgmtDetailConfigView extends VLayout {
 	private Label lblNewLabel_3;
 	private Label lblNewLabel_4;
 	private Label lblNewLabel_5;
+	private MgmtDetailView mgmtDetailView;
+	private CommunicationServiceAsync rpcService;
 
-	public MgmtDetailConfigView() {
+	public MgmtDetailConfigView(MgmtDetailView mgmtDetailView, CommunicationServiceAsync rpcService) {
+		this.mgmtDetailView = mgmtDetailView;
+		this.rpcService = rpcService;
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
 		lblNewLabel_1.setHeight("30");
@@ -64,11 +69,11 @@ public class MgmtDetailConfigView extends VLayout {
 		dynamicForm_4_Nodes = new DynamicForm();
 		cbSyncTypeNodes = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
 		cbSyncTypeNodes.setValueMap("periodic","batch");
-		intTimeWindowsNodes = new IntegerItem();
-		intTimeWindowsNodes.setTitle("Time window (ms)");
+		intTimeWindowNodes = new IntegerItem();
+		intTimeWindowNodes.setTitle("Time window (ms)");
 		intCommitlogTotalSpaceNodes = new IntegerItem();
 		intCommitlogTotalSpaceNodes.setTitle("commitlog_total_space (0 = unlimited) (mb)");
-		dynamicForm_4_Nodes.setFields(new FormItem[] { cbSyncTypeNodes, intTimeWindowsNodes, intCommitlogTotalSpaceNodes});
+		dynamicForm_4_Nodes.setFields(new FormItem[] { cbSyncTypeNodes, intTimeWindowNodes, intCommitlogTotalSpaceNodes});
 		addMember(dynamicForm_4_Nodes);
 		
 		addMember(lblNewLabel_3);
@@ -96,5 +101,123 @@ public class MgmtDetailConfigView extends VLayout {
 		dynamicForm_7_Nodes.setFields(new FormItem[] { intMemtableTotalSpaceNodes, intMemtableWriterThreadsNodes, intFlushFractionNodes });
 		
 		addMember(dynamicForm_7_Nodes);
+		
+		bind();
+	}
+
+	private void bind() {
+		
+	}
+	
+	/**
+	 * 
+	 * @return Returns 'true' if enabled, else 'false'.
+	 */
+	public boolean getHintedHandoff() {
+		if("Enabled".equals(rgHintedHandoffNodes.getValueAsString())) {
+			return true;			
+		} else {
+			return false;
+		}
+	}
+	
+	public int getMaximumWindowTime() {
+		return intMaxWindowTimeNodes.getValueAsInteger();
+	}
+	
+	public int getThrottleDelay() {
+		return intThrottleDelayNodes.getValueAsInteger();
+	}
+	
+	public String getSyncType() {
+		return cbSyncTypeNodes.getValueAsString();
+	}
+	
+	public int getTimeWindow() {
+		return intTimeWindowNodes.getValueAsInteger();
+	}
+	
+	public int getCommitlogTotalSpace() {
+		return intCommitlogTotalSpaceNodes.getValueAsInteger();
+	}
+	
+	public float getReduceCacheAt() {
+		return floatReduceCacheAtNodes.getValueAsFloat();
+	}
+	
+	public float getReduceCacheCapacity() {
+		return floatReduceCacheCapacityNodes.getValueAsFloat();
+	}
+	
+	public int getConcurrentReads() {
+		return intConcurrentReadsNodes.getValueAsInteger();
+	}
+	
+	public int getConcurrentWrites() {
+		return intConcurrentWritesNodes.getValueAsInteger();
+	}
+	
+	public int getMemtableTotalSpace() {
+		return intMemtableTotalSpaceNodes.getValueAsInteger();
+	}
+	
+	public int getMemtableWriterThreads() {
+		return intMemtableWriterThreadsNodes.getValueAsInteger();
+	}
+	
+	public int getFlushFraction() {
+		return intFlushFractionNodes.getValueAsInteger();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
