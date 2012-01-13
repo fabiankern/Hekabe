@@ -42,10 +42,13 @@ public class NewClusterHardwarePresenter implements Presenter {
 		display.getNextButton().addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				eventBus.fireEvent(new NewClusterSwitchToTabTwoEvent());
+				doSwitchToTabTwo();
 			}
 		});
-		
+				
+	}
+	
+	private void doSwitchToTabTwo() {
 		
 	}
 

@@ -1,10 +1,11 @@
 package com.hekabe.dashboard.client.view;
 
+import com.hekabe.dashboard.client.presenter.NewClusterPresenter;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 
-public class NewClusterView extends VLayout {
+public class NewClusterView extends VLayout implements NewClusterPresenter.Display {
 
 	VLayout layout = new VLayout();
 	TabSet newClusterTabSet = new TabSet();
@@ -24,14 +25,21 @@ public class NewClusterView extends VLayout {
 		newClusterTabSet.addTab(hardwareTab);
 		newClusterTabSet.addTab(cassandraTab);
 		newClusterTabSet.addTab(cassandraConfigTab);
-		//newClusterTabSet.disableTab(1);
-		//newClusterTabSet.disableTab(2);
+		newClusterTabSet.disableTab(1);
+		newClusterTabSet.disableTab(2);
 		
 		addMember(newClusterTabSet);
-		//initWidget(newClusterTabSet);
 	}
 
 	public VLayout getPane() {
 		return layout;
+	}
+
+	public TabSet getTabSet() {
+		return newClusterTabSet;
+	}
+
+	public VLayout asVLayout() {
+		return this;
 	}
 }

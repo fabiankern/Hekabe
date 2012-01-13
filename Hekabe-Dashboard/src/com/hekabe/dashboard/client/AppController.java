@@ -31,7 +31,7 @@ public class AppController implements Presenter, ValueChangeHandler<String> {
 
 
 	public void onValueChange(ValueChangeEvent<String> event) {
-		// TODO Auto-generated method stub
+		String token = event.getValue();
 		
 	}
 
