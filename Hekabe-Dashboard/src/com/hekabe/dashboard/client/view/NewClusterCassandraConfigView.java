@@ -47,12 +47,15 @@ public class NewClusterCassandraConfigView extends VLayout {
 		this.rpcService = rpcService;
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
-		lblNewLabel_1.setHeight("30");
+		lblNewLabel_1.setHeight(30);
+		lblNewLabel_1.setWidth(520);
+		lblNewLabel_1.addStyleName("label");
 		addMember(lblNewLabel_1);
 		
 		dynamicForm_3 = new DynamicForm();
 		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
-		rgHintedHandoff.setVertical(false);
+		rgHintedHandoff.setWidth(220);
+		//rgHintedHandoff.setVertical(false);
 		rgHintedHandoff.setValueMap("Enabled","Disabled");
 		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
@@ -61,6 +64,8 @@ public class NewClusterCassandraConfigView extends VLayout {
 		
 		lblNewLabel_2 = new Label("Commit Log");
 		lblNewLabel_2.setHeight(30);
+		lblNewLabel_2.setWidth(520);
+		lblNewLabel_2.addStyleName("label");
 		addMember(lblNewLabel_2);
 		
 		dynamicForm_4 = new DynamicForm();
@@ -76,6 +81,8 @@ public class NewClusterCassandraConfigView extends VLayout {
 		
 		lblNewLabel_3 = new Label("Garbage Collection");
 		lblNewLabel_3.setHeight(30);
+		lblNewLabel_3.setWidth(520);
+		lblNewLabel_3.addStyleName("label");
 		addMember(lblNewLabel_3);
 		
 		dynamicForm_5 = new DynamicForm();
@@ -86,6 +93,8 @@ public class NewClusterCassandraConfigView extends VLayout {
 		
 		lblNewLabel_4 = new Label("Read/Write");
 		lblNewLabel_4.setHeight(30);
+		lblNewLabel_4.setWidth(520);
+		lblNewLabel_4.addStyleName("label");
 		addMember(lblNewLabel_4);
 		
 		dynamicForm_6 = new DynamicForm();
@@ -96,6 +105,8 @@ public class NewClusterCassandraConfigView extends VLayout {
 		
 		lblNewLabel_5 = new Label("Memtable");
 		lblNewLabel_5.setHeight(30);
+		lblNewLabel_5.setWidth(520);
+		lblNewLabel_5.addStyleName("label");
 		addMember(lblNewLabel_5);
 		
 		dynamicForm_7 = new DynamicForm();

@@ -294,3 +294,15 @@ a:visited {
 	background-color: #e8eef7;
 	cursor: hand;
 }
+
+.label {
+	width: 400px;
+	height: 50px;
+	vertical-align: bottom;
+	font-weight: bold;
+	border-bottom: 1px solid black;
+}
+
+.formTitle {
+	width: 240px;
+}

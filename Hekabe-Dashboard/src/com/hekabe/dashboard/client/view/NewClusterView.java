@@ -20,6 +20,8 @@ public class NewClusterView extends VLayout {
 		this.dashboard = dashboard;
 		this.rpcService = rpcService;
 		
+		this.setMargin(10);
+		
 		NewClusterHardwareView hardware = new NewClusterHardwareView(this, rpcService);
 		NewClusterCassandraView cassandra = new NewClusterCassandraView(this, rpcService);
 		NewClusterCassandraConfigView cassandraConfig = new NewClusterCassandraConfigView(this, rpcService);

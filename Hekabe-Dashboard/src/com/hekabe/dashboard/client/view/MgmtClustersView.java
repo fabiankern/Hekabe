@@ -21,7 +21,7 @@ public class MgmtClustersView extends VLayout {
 		runningClusterListGrid = new ListGrid();
 		runningClusterListGrid.setAutoDraw(false);
 		
-		runningClusterListGrid.setPixelSize(1000, 150);
+		runningClusterListGrid.setPixelSize(978, 150);
 		runningClusterListGrid.setEmptyMessage("No clusters running.");
 		fieldName = new TreeGridField("fieldName", "Name");
 		fieldProvider = new TreeGridField("fieldProvider", "Provider");

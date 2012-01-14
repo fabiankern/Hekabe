@@ -30,6 +30,8 @@ public class MgmtDetailNewNodeView extends VLayout {
 		
 		lblNewNode = new Label("New Node");
 		lblNewNode.setHeight(30);
+		lblNewNode.setWidth(520);
+		lblNewNode.addStyleName("label");
 		addMember(lblNewNode);
 		
 		dynamicForm = new DynamicForm();

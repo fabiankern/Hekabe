@@ -19,6 +19,9 @@ public class MgmtView extends VLayout {
 		clusterView = new MgmtClustersView(this, rpcService);
 		detailView = new MgmtDetailView(this, rpcService);
 		
+		clusterView.setMargin(10);
+		detailView.setMargin(10);
+		
 		addMember(clusterView);
 		addMember(detailView);
 		setOverflow(Overflow.VISIBLE);

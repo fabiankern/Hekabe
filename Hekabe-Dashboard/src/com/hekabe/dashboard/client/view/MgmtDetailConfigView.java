@@ -43,15 +43,29 @@ public class MgmtDetailConfigView extends VLayout {
 		this.rpcService = rpcService;
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
-		lblNewLabel_1.setHeight("30");
+		lblNewLabel_1.setHeight(30);
+		lblNewLabel_1.setWidth(520);
+		lblNewLabel_1.addStyleName("label");
+		
 		lblNewLabel_2 = new Label("Commit Log");
 		lblNewLabel_2.setHeight(30);
+		lblNewLabel_2.setWidth(520);
+		lblNewLabel_2.addStyleName("label");
+		
 		lblNewLabel_3 = new Label("Garbage Collection");
 		lblNewLabel_3.setHeight(30);
+		lblNewLabel_3.setWidth(520);
+		lblNewLabel_3.addStyleName("label");
+		
 		lblNewLabel_4 = new Label("Read/Write");
 		lblNewLabel_4.setHeight(30);
+		lblNewLabel_4.setWidth(520);
+		lblNewLabel_4.addStyleName("label");
+		
 		lblNewLabel_5 = new Label("Memtable");
 		lblNewLabel_5.setHeight(30);
+		lblNewLabel_5.setWidth(520);
+		lblNewLabel_5.addStyleName("label");
 
 		addMember(lblNewLabel_1);
 		

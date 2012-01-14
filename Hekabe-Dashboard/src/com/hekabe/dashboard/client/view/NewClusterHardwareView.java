@@ -39,7 +39,9 @@ public class NewClusterHardwareView extends VLayout {
 		this.rpcService = rpcService;
 		
 		lblProvider = new Label("Provider");
-		lblProvider.setHeight("30");
+		lblProvider.setHeight(30);
+		lblProvider.setWidth(520);
+		lblProvider.addStyleName("label");
 		addMember(lblProvider);
 		
 		dynamicForm = new DynamicForm();
@@ -59,7 +61,9 @@ public class NewClusterHardwareView extends VLayout {
 		addMember(dynamicForm);
 		
 		lblCluster = new Label("Cluster");
-		lblCluster.setHeight("30");
+		lblCluster.setHeight(30);
+		lblCluster.setWidth(520);
+		lblCluster.addStyleName("label");
 		addMember(lblCluster);
 		
 		dynamicForm_01 = new DynamicForm();

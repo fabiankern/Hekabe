@@ -18,7 +18,7 @@ public class MgmtDetailView extends VLayout {
 		this.mgmtView = mgmtView;
 		this.rpcService = rpcService;		
 		
-		mgmtTabSet.setPixelSize(1000, 400);
+		mgmtTabSet.setPixelSize(978, 400);
 		
 		MgmtDetailNodeSummaryView nodeSummary = new MgmtDetailNodeSummaryView(this, rpcService);
 		MgmtDetailNewNodeView newNode = new MgmtDetailNewNodeView(this, rpcService);

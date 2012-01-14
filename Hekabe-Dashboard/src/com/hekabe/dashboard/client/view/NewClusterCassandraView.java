@@ -28,7 +28,9 @@ public class NewClusterCassandraView extends VLayout {
 		this.rpcService = rpcService;
 		
 		lblNewLabel = new Label("Cluster");
-		lblNewLabel.setHeight("30");
+		lblNewLabel.setHeight(30);
+		lblNewLabel.setWidth(520);
+		lblNewLabel.addStyleName("label");
 		addMember(lblNewLabel);
 		
 		dynamicForm_1 = new DynamicForm();
