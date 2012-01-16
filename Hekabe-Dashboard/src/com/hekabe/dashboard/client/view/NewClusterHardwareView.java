@@ -1,10 +1,14 @@
 package com.hekabe.dashboard.client.view;
 
 import com.hekabe.dashboard.client.CommunicationServiceAsync;
+import com.smartgwt.client.docs.KeyboardEvents;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.events.KeyDownEvent;
+import com.smartgwt.client.widgets.events.KeyDownHandler;
+import com.smartgwt.client.widgets.events.KeyPressEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;

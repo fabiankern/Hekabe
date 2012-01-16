@@ -35,4 +35,8 @@ public class MgmtView extends VLayout {
 	public MgmtDetailView getDetailView() {
 		return detailView;
 	}
+	
+	public Dashboard getDashboard() {
+		return dashboard;
+	}
 }

@@ -14,6 +14,9 @@ public class NewClusterView extends VLayout {
 	Tab cassandraTab = new Tab("2. Cassandra");
 	Tab cassandraConfigTab = new Tab("3. Cassandra Config Tuning");
 	Dashboard dashboard;
+	NewClusterHardwareView hardware;
+	NewClusterCassandraView cassandra;
+	NewClusterCassandraConfigView cassandraConfig;
 	CommunicationServiceAsync rpcService;
 	
 	public NewClusterView(Dashboard dashboard, CommunicationServiceAsync rpcService) {
@@ -22,9 +25,9 @@ public class NewClusterView extends VLayout {
 		
 		this.setMargin(10);
 		
-		NewClusterHardwareView hardware = new NewClusterHardwareView(this, rpcService);
-		NewClusterCassandraView cassandra = new NewClusterCassandraView(this, rpcService);
-		NewClusterCassandraConfigView cassandraConfig = new NewClusterCassandraConfigView(this, rpcService);
+		hardware = new NewClusterHardwareView(this, rpcService);
+		cassandra = new NewClusterCassandraView(this, rpcService);
+		cassandraConfig = new NewClusterCassandraConfigView(this, rpcService);
 		
 		hardwareTab.setPane(hardware);
 		cassandraTab.setPane(cassandra);
@@ -41,5 +44,17 @@ public class NewClusterView extends VLayout {
 
 	public TabSet getTabSet() {
 		return newClusterTabSet;
+	}
+	
+	public NewClusterHardwareView getNewClusterHardwareView() {
+		return hardware;
+	}
+	
+	public NewClusterCassandraView getNewClusterCassandraView() {
+		return cassandra;
+	}
+	
+	public NewClusterCassandraConfigView getNewClusterCassandraConfigView() {
+		return cassandraConfig;
 	}
 }

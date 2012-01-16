@@ -55,7 +55,7 @@ public class NewClusterCassandraConfigView extends VLayout {
 		dynamicForm_3 = new DynamicForm();
 		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
 		rgHintedHandoff.setWidth(220);
-		//rgHintedHandoff.setVertical(false);
+		rgHintedHandoff.setVertical(true);
 		rgHintedHandoff.setValueMap("Enabled","Disabled");
 		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
@@ -120,7 +120,25 @@ public class NewClusterCassandraConfigView extends VLayout {
 				
 		addMember(btnStartNewCluster);
 		
+		initPresetValues();
+		
 		bind();
+	}
+
+	private void initPresetValues() {
+		rgHintedHandoff.setDefaultValue("Enabled");
+		intMaxWindowTime.setDefaultValue(3600000);
+		intThrottleDelay.setDefaultValue(1);
+		cbSyncType.setDefaultValue("batch");
+		intTimeWindow.setDefaultValue(50);
+		intCommitlogTotalSpace.setDefaultValue(4096);
+		floatReduceCacheAt.setDefaultValue("0.85");
+		floatReduceCacheCapacity.setDefaultValue("0.6");
+		intConcurrentReads.setDefaultValue(32);
+		intConcurrentWrites.setDefaultValue(32);
+		intMemtableTotalSpace.setDefaultValue(2048);
+		intMemtableWriterThreads.setDefaultValue(1);
+		intFlushFraction.setDefaultValue("0.75");
 	}
 
 	private void bind() {

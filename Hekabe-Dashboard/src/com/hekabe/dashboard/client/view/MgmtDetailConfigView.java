@@ -71,7 +71,8 @@ public class MgmtDetailConfigView extends VLayout {
 		
 		dynamicForm_3_Nodes = new DynamicForm();
 		rgHintedHandoffNodes = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
-		rgHintedHandoffNodes.setVertical(false);
+		rgHintedHandoffNodes.setWidth(220);
+		rgHintedHandoffNodes.setVertical(true);
 		rgHintedHandoffNodes.setValueMap("Enabled","Disabled");
 		intMaxWindowTimeNodes = new IntegerItem("maxWindowTimeNodes", "Maximum Window Time (ms)");
 		intThrottleDelayNodes = new IntegerItem("throttleDelayNodes", "Throttle Delay (ms)");
@@ -116,7 +117,25 @@ public class MgmtDetailConfigView extends VLayout {
 		
 		addMember(dynamicForm_7_Nodes);
 		
+		initPresetValues();
+		
 		bind();
+	}
+	
+	private void initPresetValues() {
+		rgHintedHandoffNodes.setValue("Enabled");
+		intMaxWindowTimeNodes.setValue(3600000);
+		intThrottleDelayNodes.setValue(1);
+		cbSyncTypeNodes.setValue("batch");
+		intTimeWindowNodes.setValue(50);
+		intCommitlogTotalSpaceNodes.setValue(4096);
+		floatReduceCacheAtNodes.setValue("0.85");
+		floatReduceCacheCapacityNodes.setValue("0.6");
+		intConcurrentReadsNodes.setValue(32);
+		intConcurrentWritesNodes.setValue(32);
+		intMemtableTotalSpaceNodes.setValue(2048);
+		intMemtableWriterThreadsNodes.setValue(1);
+		intFlushFractionNodes.setValue("0.75");
 	}
 
 	private void bind() {

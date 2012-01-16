@@ -38,4 +38,8 @@ public class MgmtDetailView extends VLayout {
 	public TabSet getMgmtTabSet() {
 		return mgmtTabSet;
 	}
+	
+	public MgmtView getMgmtView() {
+		return mgmtView;
+	}
 }
