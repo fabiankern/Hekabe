@@ -1,0 +1,9 @@
+com.hekabe.dashboard.client
+com.hekabe.dashboard.client.data
+com.hekabe.dashboard.client.dialog
+com.hekabe.dashboard.client.view
+com.hekabe.dashboard.server
+com.hekabe.dashboard.server.util
+com.hekabe.dashboard.shared
+com.hekabe.dashboard.shared.parameter
+com.hekabe.dashboard.shared.util

@@ -1,2 +1,3 @@
 # Module com.hekabe.dashboard.Dashboard
 # RPC service class, partial path of RPC policy file
+com.hekabe.dashboard.client.CommunicationService, 1CC15022F00A110F7052D20E60277D7D.gwt.rpc

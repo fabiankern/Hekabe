@@ -10,8 +10,14 @@ public class MgmtView extends VLayout {
 	private MgmtClustersView clusterView;
 	private MgmtDetailView detailView;
 	private Dashboard dashboard;
+	@SuppressWarnings("unused")
 	private CommunicationServiceAsync rpcService;
 	
+	/**
+	 * Creates ManagementView
+	 * @param dashboard
+	 * @param rpcService
+	 */
 	public MgmtView(Dashboard dashboard, CommunicationServiceAsync rpcService) {
 		this.dashboard = dashboard;
 		this.rpcService = rpcService;
@@ -28,14 +34,26 @@ public class MgmtView extends VLayout {
 		setAutoHeight();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public MgmtClustersView getClusterView() {
 		return clusterView;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public MgmtDetailView getDetailView() {
 		return detailView;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Dashboard getDashboard() {
 		return dashboard;
 	}

@@ -1,7 +1,17 @@
 package com.hekabe.dashboard.client.view;
 
+import java.util.HashMap;
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.hekabe.dashboard.client.CommunicationServiceAsync;
+import com.hekabe.dashboard.client.dialog.ProgressDialog;
+import com.hekabe.dashboard.shared.NewClusterExchange;
+import com.hekabe.dashboard.shared.parameter.StringParameter;
+import com.hekabe.dashboard.shared.util.Util;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Dialog;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -39,24 +49,33 @@ public class NewClusterCassandraConfigView extends VLayout {
 	private IntegerItem intMemtableWriterThreads;
 	private IntegerItem intFlushFraction;
 	private Button btnStartNewCluster;
+	
 	private NewClusterView newClusterView;
 	private CommunicationServiceAsync rpcService;
+	private NewClusterExchange ex;
 
-	public NewClusterCassandraConfigView(NewClusterView newClusterView, CommunicationServiceAsync rpcService) {
+	/**
+	 * 
+	 * @param newClusterView
+	 * @param rpcService
+	 * @param ex
+	 */
+	public NewClusterCassandraConfigView(NewClusterView newClusterView, CommunicationServiceAsync rpcService, NewClusterExchange ex) {
 		this.newClusterView = newClusterView; 
 		this.rpcService = rpcService;
+		this.ex = ex;
 		
 		lblNewLabel_1 = new Label("Hinted Handoff");
 		lblNewLabel_1.setHeight(30);
 		lblNewLabel_1.setWidth(520);
-		lblNewLabel_1.addStyleName("label");
+		lblNewLabel_1.setStyleName("label");
 		addMember(lblNewLabel_1);
 		
 		dynamicForm_3 = new DynamicForm();
 		rgHintedHandoff = new RadioGroupItem("newRadioGroupItem_1", "Hinted Handoff");
 		rgHintedHandoff.setWidth(220);
-		rgHintedHandoff.setVertical(true);
-		rgHintedHandoff.setValueMap("Enabled","Disabled");
+		rgHintedHandoff.setVertical(false);
+		rgHintedHandoff.setValueMap(StringParameter.ENABLED,StringParameter.DISABLED);
 		intMaxWindowTime = new IntegerItem("maxWindowTime", "Maximum Window Time (ms)");
 		intThrottleDelay = new IntegerItem("throttleDelay", "Throttle Delay (ms)");
 		dynamicForm_3.setFields(new FormItem[] { rgHintedHandoff, intMaxWindowTime, intThrottleDelay});
@@ -65,13 +84,13 @@ public class NewClusterCassandraConfigView extends VLayout {
 		lblNewLabel_2 = new Label("Commit Log");
 		lblNewLabel_2.setHeight(30);
 		lblNewLabel_2.setWidth(520);
-		lblNewLabel_2.addStyleName("label");
+		lblNewLabel_2.setStyleName("label");
 		addMember(lblNewLabel_2);
 		
 		dynamicForm_4 = new DynamicForm();
 		cbSyncType = new ComboBoxItem("newComboBoxItem_1", "Synchronisation Type");
-		cbSyncType.setValueMap("periodic",
-							   "batch");
+		cbSyncType.setValueMap(StringParameter.PERIODIC,
+							   StringParameter.BATCH);
 		intTimeWindow = new IntegerItem();
 		intTimeWindow.setTitle("Time window (ms)");
 		intCommitlogTotalSpace = new IntegerItem();
@@ -82,7 +101,7 @@ public class NewClusterCassandraConfigView extends VLayout {
 		lblNewLabel_3 = new Label("Garbage Collection");
 		lblNewLabel_3.setHeight(30);
 		lblNewLabel_3.setWidth(520);
-		lblNewLabel_3.addStyleName("label");
+		lblNewLabel_3.setStyleName("label");
 		addMember(lblNewLabel_3);
 		
 		dynamicForm_5 = new DynamicForm();
@@ -94,7 +113,7 @@ public class NewClusterCassandraConfigView extends VLayout {
 		lblNewLabel_4 = new Label("Read/Write");
 		lblNewLabel_4.setHeight(30);
 		lblNewLabel_4.setWidth(520);
-		lblNewLabel_4.addStyleName("label");
+		lblNewLabel_4.setStyleName("label");
 		addMember(lblNewLabel_4);
 		
 		dynamicForm_6 = new DynamicForm();
@@ -106,7 +125,7 @@ public class NewClusterCassandraConfigView extends VLayout {
 		lblNewLabel_5 = new Label("Memtable");
 		lblNewLabel_5.setHeight(30);
 		lblNewLabel_5.setWidth(520);
-		lblNewLabel_5.addStyleName("label");
+		lblNewLabel_5.setStyleName("label");
 		addMember(lblNewLabel_5);
 		
 		dynamicForm_7 = new DynamicForm();
@@ -119,12 +138,15 @@ public class NewClusterCassandraConfigView extends VLayout {
 		btnStartNewCluster = new Button("Start Cluster");
 				
 		addMember(btnStartNewCluster);
-		
+				
 		initPresetValues();
 		
 		bind();
 	}
 
+	/**
+	 * Initializes preset values.
+	 */
 	private void initPresetValues() {
 		rgHintedHandoff.setDefaultValue("Enabled");
 		intMaxWindowTime.setDefaultValue(3600000);
@@ -141,19 +163,126 @@ public class NewClusterCassandraConfigView extends VLayout {
 		intFlushFraction.setDefaultValue("0.75");
 	}
 
+	/**
+	 * Binds event handler to widgets.
+	 */
 	private void bind() {
 		btnStartNewCluster.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				
+				doReadWidgetInputInExchangeObject();
+				doStartCluster();
 			}
 		});
+	}
+	
+	/**
+	 * Reads all input form data and writes it into the NewClusterExchange object.
+	 */
+	protected void doReadWidgetInputInExchangeObject() {
+		NewClusterHardwareView hardwareView = newClusterView.getNewClusterHardwareView();
+		NewClusterCassandraView cassandraView = newClusterView.getNewClusterCassandraView();		
+		
+		ex.setUsername(newClusterView.getDashboard().getHeaderView().getUsername());
+		ex.setProvider(hardwareView.getProvider());
+		ex.setAccessKey(hardwareView.getAccessKey());
+		ex.setSecretAccessKey(hardwareView.getSecretAccessKey());
+		ex.setIps(Util.getIps(hardwareView.getIps(), hardwareView.getPassword()));
+		ex.setLogin(hardwareView.getLoginName());
+		if(hardwareView.getProvider().equals(StringParameter.ONE_AND_ONE_CLOUD)) {
+			ex.setRegion("Germany");
+			ex.setNumberOfInstances(hardwareView.getIps().split(";").length);
+		} else {
+			ex.setRegion(hardwareView.getRegion());
+			ex.setNumberOfInstances(hardwareView.getNumberOfInstances());
+		}
+		ex.setInstanceSize(hardwareView.getInstanceSize());
+		ex.setMultiRegionCluster(hardwareView.isMultiregionCluster());
+		
+		if(ex.isMultiRegionCluster()) {
+			ex.setMrProvider(hardwareView.getMrProvider());
+		} else {
+			ex.setMrProvider("");
+		}
+		
+		ex.setMrAccessKey(hardwareView.getMrAccessKey());
+		ex.setMrSecretAccessKey(hardwareView.getMrSecretAccessKey());
+		ex.setMrIps(Util.getIps(hardwareView.getMrIps(), hardwareView.getMrPassword()));
+		ex.setMrLogin(hardwareView.getMrLoginName());
+		if(hardwareView.getMrProvider().equals(StringParameter.ONE_AND_ONE_CLOUD)) {
+			ex.setMrRegion("Germany");
+			ex.setMrNumberOfInstances(hardwareView.getMrIps().split(";").length);
+		} else {
+			ex.setMrRegion(hardwareView.getMrRegion());
+			ex.setMrNumberOfInstances(hardwareView.getMrNumberOfInstances());
+		}
+		ex.setMrInstanceSize(hardwareView.getMrInstanceSize());
+		
+		ex.setClusterName(cassandraView.getClusterName());
+		ex.setCassandraVersion(cassandraView.getCassandraVersion());
+		ex.setPartitioner(cassandraView.getPartitioner());
+		
+		ex.setHintedHandoff(getHintedHandoff());
+		ex.setMaxWindowTime(getMaxWindowTime());
+		ex.setThrottleDelay(getThrottleDelay());
+		ex.setSyncType(getSyncType());
+		ex.setTimeWindow(getTimeWindow());
+		ex.setCommitlogTotalSpace(getCommitlogTotalSpace());
+		ex.setReduceCacheAt(getReduceCacheAt());
+		ex.setReduceCacheCapacity(getReduceCacheCapacity());
+		ex.setConcurrentReads(getConcurrentReads());
+		ex.setConcurrentWrites(getConcurrentWrites());
+		ex.setMemtableTotalSpace(getMemtableTotalSpace());
+		ex.setMemtableWriterThreads(getMemtableWriterThreads());
+		ex.setFlushFraction(getFlushFraction());
+		
+	}
+
+	/**
+	 * starts cluster
+	 */
+	protected void doStartCluster() {
+		final ProgressDialog progressDialog = new ProgressDialog();
+		progressDialog.show();
+		
+		rpcService.startInstance(ex, new AsyncCallback<String>() {
+
+			public void onFailure(Throwable caught) {
+				Dialog d = new Dialog();
+				d.setTitle("START INSTANCE FAILED");
+				d.show();
+				progressDialog.disable();
+				progressDialog.hide();
+			}
+
+			public void onSuccess(String result) {
+				SC.say(result);
+			}
+		});
+
+		final AsyncCallback<HashMap<String,String>> statusCallback = new AsyncCallback<HashMap<String,String>>() {
+			
+			public void onSuccess(HashMap<String,String> result) {
+				if(!result.get("action").equals("DONE")) {
+					progressDialog.setAction(result.get("action"));
+					progressDialog.setProgress(Integer.parseInt(result.get("progress")));
+					rpcService.getStartInstanceStatus(this);
+				} else {
+					progressDialog.hide();
+				}
+			}
+			
+			public void onFailure(Throwable caught) {
+				Window.alert("Receiving progress status failed.");
+			}
+		};
+		rpcService.getStartInstanceStatus(statusCallback);
+		
 	}
 
 	/**
 	 * 
-	 * @return Returns 'true' if enabled, else 'false'.
+	 * @return Boolean 'true' if enabled, else 'false'.
 	 */
 	public boolean getHintedHandoff() {
 		if("Enabled".equals(rgHintedHandoff.getValueAsString())) {
@@ -163,81 +292,99 @@ public class NewClusterCassandraConfigView extends VLayout {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMaxWindowTime() {
-		return intMaxWindowTime.getValueAsInteger();
+		return Integer.parseInt(intMaxWindowTime.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getThrottleDelay() {
-		return intThrottleDelay.getValueAsInteger();
+		return Integer.parseInt(intThrottleDelay.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getSyncType() {
 		return cbSyncType.getValueAsString();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getTimeWindow() {
-		return intTimeWindow.getValueAsInteger();
+		return Integer.parseInt(intTimeWindow.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getCommitlogTotalSpace() {
-		return intCommitlogTotalSpace.getValueAsInteger();
+		return Integer.parseInt(intCommitlogTotalSpace.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public float getReduceCacheAt() {
-		return floatReduceCacheAt.getValueAsFloat();
+		return Float.parseFloat(floatReduceCacheAt.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public float getReduceCacheCapacity() {
-		return floatReduceCacheCapacity.getValueAsFloat();
+		return Float.parseFloat(floatReduceCacheCapacity.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getConcurrentReads() {
-		return intConcurrentReads.getValueAsInteger();
+		return Integer.parseInt(intConcurrentReads.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getConcurrentWrites() {
-		return intConcurrentWrites.getValueAsInteger();
+		return Integer.parseInt(intConcurrentWrites.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMemtableTotalSpace() {
-		return intMemtableTotalSpace.getValueAsInteger();
+		return Integer.parseInt(intMemtableTotalSpace.getValueAsString());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMemtableWriterThreads() {
-		return intMemtableWriterThreads.getValueAsInteger();
+		return Integer.parseInt(intMemtableWriterThreads.getValueAsString());
 	}
 
-	public int getFlushFraction() {
-		return intFlushFraction.getValueAsInteger();
+	/**
+	 * 
+	 * @return
+	 */
+	public float getFlushFraction() {
+		return Float.parseFloat(intFlushFraction.getValueAsString());
 	}
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

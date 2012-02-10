@@ -18,11 +18,18 @@ package com.hekabe.dashboard.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.hekabe.dashboard.client.dialog.LoginDialog;
+import com.hekabe.dashboard.client.view.HeaderView;
 import com.hekabe.dashboard.client.view.MgmtView;
 import com.hekabe.dashboard.client.view.NewClusterView;
+import com.hekabe.dashboard.shared.parameter.StringParameter;
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VisibilityMode;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.SectionStack;
 import com.smartgwt.client.widgets.layout.SectionStackSection;
+import com.smartgwt.client.widgets.layout.events.SectionHeaderClickEvent;
+import com.smartgwt.client.widgets.layout.events.SectionHeaderClickHandler;
 
 public class Dashboard implements EntryPoint {
 	
@@ -30,23 +37,31 @@ public class Dashboard implements EntryPoint {
 	private SectionStackSection managementSection;
 	private SectionStackSection newClusterSection;
 	private MgmtView mgmtView;
+	private LoginDialog loginDialog;
 	private NewClusterView newClusterView;
+	private HeaderView headerView;
+	private Label lblUsername;
 	
+	/**
+	 * Entry-point
+	 */
 	public void onModuleLoad() {
 		CommunicationServiceAsync rpcService = GWT.create(CommunicationService.class);
 		
 		RootPanel rootPanel = RootPanel.get("content");
-		rootPanel.setSize("1000", "700");
+		rootPanel.setSize("1000", "630");
 		
 		mgmtView = new MgmtView(this, rpcService);
 		newClusterView = new NewClusterView(this, rpcService);
 		
+		headerView = new HeaderView(this);
+		
 		sectionStack = new SectionStack();
 		sectionStack.setVisibilityMode(VisibilityMode.MUTEX);
-		sectionStack.setSize("1000", "700");
+		sectionStack.setSize("1000", "622");
 		
-		managementSection = new SectionStackSection("Management");
-		newClusterSection = new SectionStackSection("New Cluster");
+		managementSection = new SectionStackSection(StringParameter.MANAGEMENT);
+		newClusterSection = new SectionStackSection(StringParameter.NEW_CLUSTER);
 		
 		managementSection.addItem(mgmtView);
 		newClusterSection.addItem(newClusterView);
@@ -56,14 +71,81 @@ public class Dashboard implements EntryPoint {
 		
 		sectionStack.expandSection(1);
 		
+		lblUsername = new Label(StringParameter.LOGGED_IN_AS);
+		lblUsername.setPixelSize(1000, 16);
+		lblUsername.setAlign(Alignment.RIGHT);
+		
+		rootPanel.add(headerView);
 		rootPanel.add(sectionStack);
+		
+		loginDialog = new LoginDialog(this, rpcService);
+		loginDialog.show();
+		
+		bind();		
+	}
+	
+	/**
+	 * binds handlers
+	 */
+	private void bind() {
+		sectionStack.addSectionHeaderClickHandler(new SectionHeaderClickHandler() {
+			
+			public void onSectionHeaderClick(SectionHeaderClickEvent event) {
+				if(event.getSection() == managementSection) {
+					getMgmtView().getClusterView().getClusterData(false);
+				}
+				
+			}
+		});
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public MgmtView getMgmtView() {
 		return mgmtView;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public SectionStack getSectionStack() {
+		return sectionStack;
+	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public NewClusterView getNewClusterView() {
 		return newClusterView;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public LoginDialog getLoginDialog() {
+		return loginDialog;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public HeaderView getHeaderView() {
+		return headerView;
+	}
+	
+	/**
+	 * 
+	 * @param username
+	 */
+	public void setUsername(String username) {
+		StringBuilder sb = new StringBuilder(StringParameter.LOGGED_IN_AS);
+		sb.append(username);
+		lblUsername.setContents(sb.toString());
 	}
 }

@@ -21,9 +21,16 @@ public class MgmtDetailNewNodeView extends VLayout {
 	private TextItem txtLoginName1and1;
 	private TextItem txtPass1and1;
 	private ComboBoxItem cbRegionNodes;
+	@SuppressWarnings("unused")
 	private MgmtDetailView mgmtDetailView;
+	@SuppressWarnings("unused")
 	private CommunicationServiceAsync rpcService;
 
+	/**
+	 * Creates MgmtDetailNewNodeView
+	 * @param mgmtDetailView
+	 * @param rpcService
+	 */
 	public MgmtDetailNewNodeView(MgmtDetailView mgmtDetailView, CommunicationServiceAsync rpcService) {
 		this.mgmtDetailView = mgmtDetailView;
 		this.rpcService = rpcService;
@@ -31,7 +38,7 @@ public class MgmtDetailNewNodeView extends VLayout {
 		lblNewNode = new Label("New Node");
 		lblNewNode.setHeight(30);
 		lblNewNode.setWidth(520);
-		lblNewNode.addStyleName("label");
+		lblNewNode.setStyleName("label");
 		addMember(lblNewNode);
 		
 		dynamicForm = new DynamicForm();
@@ -49,7 +56,8 @@ public class MgmtDetailNewNodeView extends VLayout {
 							 "US West (California)",
 							 "EU West (Ireland)",
 							 "Asia Pacific (Singapore)",
-							 "Asia Pacific (Tokyo)");
+							 "Asia Pacific (Tokyo)",
+				 			 "South America (Sao Paulo)");
 		cbRegionNodes.setDefaultToFirstOption(true);
 		
 		dynamicForm.setFields(new FormItem[] { cbProviderNodes, txtAccessKeyNodes, 
@@ -63,6 +71,9 @@ public class MgmtDetailNewNodeView extends VLayout {
 		doShowAppropriateWidgets(cbProviderNodes.getValue());
 	}
 	
+	/**
+	 * Binds handlers
+	 */
 	private void bind() {
 		cbProviderNodes.addChangedHandler(new ChangedHandler() {			
 			public void onChanged(ChangedEvent event) {
@@ -71,34 +82,64 @@ public class MgmtDetailNewNodeView extends VLayout {
 		});
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getProvider() {
 		return cbProviderNodes.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 */
 	public String getAccessKey() {
 		return txtAccessKeyNodes.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getSecretAccessKey() {
 		return txtSecretAccessKeyNodes.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getIP() {
 		return txtIpAddresses1and1.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getLoginName() {
 		return txtLoginName1and1.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getLoginPass() {
 		return txtPass1and1.getValueAsString();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getRegion() {
 		return cbRegionNodes.getValueAsString();
 	}
 
+	/**
+	 * 
+	 */
 	private void showAwsWidgets() {
 		if(txtIpAddresses1and1.isVisible()) txtIpAddresses1and1.hide();
 		if(txtLoginName1and1.isVisible()) txtLoginName1and1.hide();
@@ -109,6 +150,9 @@ public class MgmtDetailNewNodeView extends VLayout {
 		if(!cbRegionNodes.isVisible()) cbRegionNodes.show();
 	}
 
+	/**
+	 * 
+	 */
 	private void show1and1Widgets() {
 		if(txtAccessKeyNodes.isVisible()) txtAccessKeyNodes.hide();
 		if(txtSecretAccessKeyNodes.isVisible()) txtSecretAccessKeyNodes.hide();
@@ -119,6 +163,10 @@ public class MgmtDetailNewNodeView extends VLayout {
 		if(!txtPass1and1.isVisible()) txtPass1and1.show();
 	}
 
+	/**
+	 * 
+	 * @param event
+	 */
 	private void doShowAppropriateWidgets(Object event) {
 		if("Amazon EC2".equals(event)) {
 			showAwsWidgets();
